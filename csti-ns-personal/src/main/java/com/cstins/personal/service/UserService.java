@@ -19,7 +19,7 @@ public class UserService {
     @Autowired
     private UserDao userDao;
 
-    List<User> getUsers() {
+    public List<User> getUsers() {
         return userDao.findAllByTypeEquals(2);
     }
 
