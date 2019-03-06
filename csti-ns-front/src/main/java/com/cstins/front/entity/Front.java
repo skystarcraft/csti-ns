@@ -3,6 +3,7 @@ package com.cstins.front.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * @program: csti-ns
@@ -23,6 +24,12 @@ public class Front implements Serializable {
 
     @Column
     private String group_code;
+
+    @Column
+    private Date start;
+
+    @Column
+    private Date end;
 
     @Column
     private String gzh;
@@ -57,6 +64,22 @@ public class Front implements Serializable {
 
     public void setGzh(String gzh) {
         this.gzh = gzh;
+    }
+
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
+        this.start = start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date end) {
+        this.end = end;
     }
 
     public Front() {

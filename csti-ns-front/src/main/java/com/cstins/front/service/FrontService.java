@@ -2,12 +2,15 @@ package com.cstins.front.service;
 
 import com.cstins.front.dao.FrontDao;
 import com.cstins.front.entity.Front;
+import com.cstins.front.tools.JsonDateValueProcessor;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
 import java.util.Optional;
 
 /**
@@ -56,6 +59,7 @@ public class FrontService {
             return front;
         } else {
             Optional<Front> front = frontDao.findById(1);
+            new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
             JSONObject jsonObject = JSONObject.fromObject(front.get());
             redisTemplate.opsForHash().put(FRONTINFO, "info", jsonObject.toString());
             return front.get();
