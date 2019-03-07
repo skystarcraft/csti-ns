@@ -11,7 +11,7 @@
    https://github.com/Leibnizhu/AlipayWechatPlatform
    ```
 
-- 后段应用框架
+- 后端应用框架
 
    ```
    vertx-web + springboot + springcloud + jpa
