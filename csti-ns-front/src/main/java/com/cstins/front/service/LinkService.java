@@ -51,22 +51,34 @@ public class LinkService {
 
     public boolean addLink(Link link) {
         if (link == null) return false;
-        linkDao.addLink(link.getLink_name(), link.getLink_addr());
-        redisTemplate.opsForHash().delete(REDISKEY, "links");
+        try {
+            linkDao.addLink(link.getLink_name(), link.getLink_addr());
+            redisTemplate.opsForHash().delete(REDISKEY, "links");
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
     public boolean updateLink(Link link) {
         if (link == null) return false;
-        linkDao.updateLink(link.getLink_name(), link.getLink_addr(), link.getId());
-        redisTemplate.opsForHash().delete(REDISKEY, "links");
+        try {
+            linkDao.updateLink(link.getLink_name(), link.getLink_addr(), link.getId());
+            redisTemplate.opsForHash().delete(REDISKEY, "links");
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
     public boolean delLnk(Link link) {
         if (link == null) return false;
-        linkDao.delete(link);
-        redisTemplate.opsForHash().delete(REDISKEY, "links");
+        try {
+            linkDao.delete(link);
+            redisTemplate.opsForHash().delete(REDISKEY, "links");
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 }

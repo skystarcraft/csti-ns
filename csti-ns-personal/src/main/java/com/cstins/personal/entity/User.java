@@ -17,7 +17,7 @@ import java.util.Date;
 public class User implements Serializable {
 
     @Id
-    private Integer id;             //学号
+    private Integer uid;         //学号
 
     @Column
     private String user_name;       //姓名
@@ -29,7 +29,7 @@ public class User implements Serializable {
     private String user_image;      //头像URL
 
     @Column
-    private String user_integral;   //积分
+    private String uintegral;   //积分
 
     @Column
     private Integer type;           //用户类别0-普通用户，1-会员，2-组内成员,3-超级管理员
@@ -61,12 +61,20 @@ public class User implements Serializable {
     public User() {
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getUid() {
+        return uid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUid(Integer uid) {
+        this.uid = uid;
+    }
+
+    public String getUintegral() {
+        return uintegral;
+    }
+
+    public void setUintegral(String uintegral) {
+        this.uintegral = uintegral;
     }
 
     public String getUser_name() {
@@ -91,14 +99,6 @@ public class User implements Serializable {
 
     public void setUser_image(String user_image) {
         this.user_image = user_image;
-    }
-
-    public String getUser_integral() {
-        return user_integral;
-    }
-
-    public void setUser_integral(String user_integral) {
-        this.user_integral = user_integral;
     }
 
     public Integer getType() {

@@ -38,13 +38,14 @@ public class FrontService {
      */
     public boolean updateFront(Front front) {
         if (front == null) return false;
-        Front save = frontDao.save(front);
-        JSONObject jsonObject = JSONObject.fromObject(front);
-        redisTemplate.opsForHash().put(FRONTINFO, "info", jsonObject.toString());
-        if (!save.equals(front)) {
-            return true;
+        try {
+            frontDao.save(front);
+            JSONObject jsonObject = JSONObject.fromObject(front);
+            redisTemplate.opsForHash().put(FRONTINFO, "info", jsonObject.toString());
+        } catch (Exception e) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     /**

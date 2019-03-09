@@ -83,7 +83,11 @@ public class ArticleService {
 
     public boolean delArticle(Article article) {
         if (article == null) return false;
-        articleDao.delete(article);
+        try {
+            articleDao.delete(article);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
@@ -109,13 +113,21 @@ public class ArticleService {
 
     public boolean addTag(Integer article, Integer tags) {
         if (article == null || tags == null) return false;
-        articleTagDao.addTagToArticle(article, tags);
+        try {
+            articleTagDao.addTagToArticle(article, tags);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
     public boolean delTag(Integer article, Integer tags) {
         if (article == null || tags == null) return false;
-        articleTagDao.delTagToArticle(article, tags);
+        try {
+            articleTagDao.delTagToArticle(article, tags);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 

@@ -30,7 +30,11 @@ public class TagService {
 
     public boolean delTag(Tags tag) {
         if (tag == null) return false;
-        tagsDao.delete(tag);
+        try {
+            tagsDao.delete(tag);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 

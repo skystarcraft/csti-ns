@@ -44,7 +44,11 @@ public class ArticleCommentService {
 
     public boolean delComment (ArticleComment articleComment) {
         if (articleComment == null) return false;
-        articleCommentDao.delete(articleComment);
+        try {
+            articleCommentDao.delete(articleComment);
+        } catch (Exception e) {
+            return false;
+        }
         return true;
     }
 
