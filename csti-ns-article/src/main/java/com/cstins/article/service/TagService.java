@@ -2,6 +2,8 @@ package com.cstins.article.service;
 
 import com.cstins.article.dao.TagsDao;
 import com.cstins.article.entity.Tags;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.List;
 
 @Service
 public class TagService {
+
+    private static final Logger logger = LogManager.getLogger(TagService.class);
 
     @Autowired
     private TagsDao tagsDao;
@@ -33,6 +37,23 @@ public class TagService {
         try {
             tagsDao.delete(tag);
         } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 批量删除标签
+     * @param list
+     * @return
+     */
+    public boolean delTags(List<Integer> list) {
+        try {
+            list.forEach(tid -> {
+                tagsDao.delete(tagsDao.findById(tid).get());
+            });
+        } catch (Exception e) {
+            logger.error(e);
             return false;
         }
         return true;
