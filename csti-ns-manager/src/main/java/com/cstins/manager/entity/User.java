@@ -26,6 +26,9 @@ public class User implements Serializable {
     private String user_password;   //密码
 
     @Column
+    private Integer usex;           //用户性别
+
+    @Column
     private String user_image;      //头像URL
 
     @Column
@@ -59,6 +62,14 @@ public class User implements Serializable {
     private String user_mail;       //邮箱
 
     public User() {
+    }
+
+    public Integer getUsex() {
+        return usex;
+    }
+
+    public void setUsex(Integer usex) {
+        this.usex = usex;
     }
 
     public Integer getUid() {

@@ -1,0 +1,8 @@
+spring:
+  data:
+    elasticsearch:
+      cluster-name: elasticsearch
+      cluster-nodes: 106.13.86.229:9300
+  elasticsearch:
+    rest:
+      uris: ["http://106.13.86.229:9200"]

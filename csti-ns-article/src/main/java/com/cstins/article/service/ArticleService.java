@@ -39,18 +39,22 @@ public class ArticleService {
 
     public List<Article> getAllArticles() {
         List<Article> list = null;
-        Object articles = redisTemplate.opsForHash().get(REDISKEY, "articles");
-        if (articles != null && !"".equals(articles) && !"null".equals(articles)) {
-            list = new ArrayList<>();
-            JSONArray jsonArray = JSONArray.fromObject(articles);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                Article article = (Article) JSONObject.toBean((JSONObject) jsonArray.get(i), Article.class);
-                list.add(article);
+        try {
+            Object articles = redisTemplate.opsForHash().get(REDISKEY, "articles");
+            if (articles != null && !"".equals(articles) && !"null".equals(articles)) {
+                list = new ArrayList<>();
+                JSONArray jsonArray = JSONArray.fromObject(articles);
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    Article article = (Article) JSONObject.toBean((JSONObject) jsonArray.get(i), Article.class);
+                    list.add(article);
+                }
+            } else {
+                list = articleDao.findAll();
+                JSONArray jsonArray = JSONArray.fromObject(list);
+                redisTemplate.opsForHash().put(REDISKEY, "articles", jsonArray.toString());
             }
-        } else {
-            list = articleDao.findAll();
-            JSONArray jsonArray = JSONArray.fromObject(list);
-            redisTemplate.opsForHash().put(REDISKEY, "articles", jsonArray.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }
