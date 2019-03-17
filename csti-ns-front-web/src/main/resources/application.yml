@@ -1,0 +1,11 @@
+auth-server: http://localhost:8086
+security:
+  oauth2:
+    client:
+      client-id: ssoClient
+      client-secret: ssoClient
+      access-token-uri: ${auth-server}/oauth/token # 获取access token接口
+      user-authorization-uri: ${auth-server}/oauth/authorize #  获取Authorization Code接口
+      scope: sso
+    resource:
+      user-info-uri: ${auth-server}/oauth/check_token # 验证token的接口
