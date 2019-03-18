@@ -17,10 +17,10 @@ public class Integral_price {
     private Integer integral_id;
 
     @Column
-    private Integer integral_rmb;       //人民币
+    private Integer rmb;       //人民币
 
     @Column
-    private Integer integral_add;       //积分
+    private Integer radd;       //积分
 
     public Integral_price() {
     }
@@ -33,19 +33,19 @@ public class Integral_price {
         this.integral_id = integral_id;
     }
 
-    public Integer getIntegral_rmb() {
-        return integral_rmb;
+    public Integer getRmb() {
+        return rmb;
     }
 
-    public void setIntegral_rmb(Integer integral_rmb) {
-        this.integral_rmb = integral_rmb;
+    public void setRmb(Integer rmb) {
+        this.rmb = rmb;
     }
 
-    public Integer getIntegral_add() {
-        return integral_add;
+    public Integer getRadd() {
+        return radd;
     }
 
-    public void setIntegral_add(Integer integral_add) {
-        this.integral_add = integral_add;
+    public void setRadd(Integer radd) {
+        this.radd = radd;
     }
 }

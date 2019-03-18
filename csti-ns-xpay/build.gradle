@@ -33,7 +33,7 @@ dependencies {
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-//    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.cloud:spring-cloud-starter'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-hystrix'
@@ -49,6 +49,8 @@ dependencies {
     compile(
             'net.sf.json-lib:json-lib:2.4:jdk15'
     )
+    implementation 'com.alipay.sdk:alipay-sdk-java:3.7.4.ALL'
+
 }
 
 dependencyManagement {

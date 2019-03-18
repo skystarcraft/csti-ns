@@ -19,8 +19,21 @@ public class PriceService {
     @Autowired
     private PriceDao priceDao;
 
+    /**
+     * 获取价格列表
+     * @return
+     */
     public List<Integral_price> getAll() {
         return priceDao.findAll();
+    }
+
+    /**
+     * 根据人民币查询积分
+     * @param rmb
+     * @return
+     */
+    public Integer findByMoney(Integer rmb) {
+        return priceDao.findByRmbEquals(rmb).getRadd();
     }
 
 }
