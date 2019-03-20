@@ -32,7 +32,7 @@ public class User implements Serializable {
     private String user_image;      //头像URL
 
     @Column
-    private String uintegral;   //积分
+    private Integer uintegral;   //积分
 
     @Column
     private Integer type;           //用户类别0-普通用户，1-会员，2-组内成员,3-超级管理员
@@ -47,7 +47,7 @@ public class User implements Serializable {
     private String user_class;      //班级，如计科二班
 
     @Column
-    private String user_grate;      //年级，如15级
+    private Integer ugrate;      //年级，如2015,2016
 
     @Column
     private String user_payimage;   //收款二维码连接
@@ -80,11 +80,11 @@ public class User implements Serializable {
         this.uid = uid;
     }
 
-    public String getUintegral() {
+    public Integer getUintegral() {
         return uintegral;
     }
 
-    public void setUintegral(String uintegral) {
+    public void setUintegral(Integer uintegral) {
         this.uintegral = uintegral;
     }
 
@@ -144,12 +144,12 @@ public class User implements Serializable {
         this.user_class = user_class;
     }
 
-    public String getUser_grate() {
-        return user_grate;
+    public Integer getUgrate() {
+        return ugrate;
     }
 
-    public void setUser_grate(String user_grate) {
-        this.user_grate = user_grate;
+    public void setUgrate(Integer ugrate) {
+        this.ugrate = ugrate;
     }
 
     public String getUser_payimage() {
