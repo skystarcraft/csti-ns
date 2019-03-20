@@ -1,17 +1,19 @@
 package com.cstins.sso.service;
 
+import com.cstins.sso.dao.TxSMSDao;
+import com.cstins.sso.entity.TxSMS;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.qcloudsms.SmsSingleSender;
 import com.github.qcloudsms.SmsSingleSenderResult;
 import com.github.qcloudsms.httpclient.HTTPException;
 import org.json.JSONException;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.security.SecureRandom;
-
-import static software.amazon.ion.SystemSymbols.SYMBOLS;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @program: csti-ns
@@ -23,6 +25,9 @@ import static software.amazon.ion.SystemSymbols.SYMBOLS;
 public class TXMessageService {
 
     private static final Logger logger = LogManager.getLogger(TXMessageService.class);
+
+    @Autowired
+    private TxSMSDao txSMSDao;
 
     // 短信应用SDK AppID
     private int appid = 1400193574; // 1400开头
@@ -42,25 +47,29 @@ public class TXMessageService {
      * @return
      */
     public String send(String phone) {
-        try {
-            String vcode = Generate_verification_code();
-            String[] params = {vcode};//数组具体的元素个数和模板中变量个数必须一致，例如事例中templateId:5678对应一个变量，参数数组中元素个数也必须是一个
-            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
-            SmsSingleSenderResult result = ssender.sendWithParam("86", phone,
-                    templateId, params, smsSign, "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
-            System.out.println(result);
-            return vcode;
-        } catch (HTTPException e) {
-            // HTTP响应码错误
-            logger.error(e);
-        } catch (JSONException e) {
-            // json解析错误
-            logger.error(e);
-        } catch (IOException e) {
-            // 网络IO错误
-            logger.error(e);
+        if (CountGlZero()) {
+            try {
+                String vcode = Generate_verification_code();
+                String[] params = {vcode};//数组具体的元素个数和模板中变量个数必须一致，例如事例中templateId:5678对应一个变量，参数数组中元素个数也必须是一个
+                SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
+                SmsSingleSenderResult result = ssender.sendWithParam("86", phone,
+                        templateId, params, smsSign, "", "");  // 签名参数未提供或者为空时，会使用默认签名发送短信
+                System.out.println(result);
+                return vcode;
+            } catch (HTTPException e) {
+                // HTTP响应码错误
+                logger.error(e);
+            } catch (JSONException e) {
+                // json解析错误
+                logger.error(e);
+            } catch (IOException e) {
+                // 网络IO错误
+                logger.error(e);
+            }
+            return "send failed!";
+        } else {
+            return "message is zero";
         }
-        return "send failed!";
     }
 
     /**
@@ -69,5 +78,17 @@ public class TXMessageService {
      */
     public String Generate_verification_code() {
         return (int)((Math.random()*9+1)*100000) + "";
+    }
+
+    @Transactional
+    public boolean CountGlZero() {
+        TxSMS txSMS = txSMSDao.findById(1).get();
+        AtomicInteger count = new AtomicInteger(txSMS.getCount());
+        if (count.getAndDecrement() > 0) {
+            txSMS.setCount(count.get());
+            txSMSDao.save(txSMS);
+            return true;
+        }
+        return false;
     }
 }
