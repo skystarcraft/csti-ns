@@ -1,0 +1,10 @@
+vertx:
+  server:
+    port: 10001
+
+  handler-mappings:
+    - path: /
+      method: GET
+      beanNames: homeHandler
+
+

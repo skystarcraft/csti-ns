@@ -3,6 +3,7 @@ package com.cstins.manager.api;
 import com.cstins.manager.entity.*;
 import com.cstins.manager.service.FrontService;
 import com.cstins.manager.service.LinkService;
+import com.cstins.manager.service.LoginService;
 import com.cstins.manager.service.ManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,9 @@ public class ManagerAPI {
 
     @Autowired
     private LinkService linkService;
+
+    @Autowired
+    private LoginService loginService;
 
     @Autowired
     private ManagerService managerService;
@@ -205,12 +209,6 @@ public class ManagerAPI {
     }
 
     /**
-     *  {
-     *      "id":78,
-     *      "link_addr": "a",
-     *      "link_name": "a",
-     *      "link_type": "FRIEND"
-     *   }
      * 删除链接
      * @param link
      * @return
@@ -224,5 +222,20 @@ public class ManagerAPI {
     @DeleteMapping("/links/{lid}")
     public boolean delLinks(@PathVariable("lid") String[] lid) {
         return linkService.delLinks(lid);
+    }
+
+    @GetMapping("/user/token/{token}")
+    public User getUserByToken(@PathVariable("token") String token) {
+        return loginService.getUserByToken(token);
+    }
+
+    @PostMapping("/user/login")
+    public String login(@RequestBody LoginUser loginUser) {
+        return loginService.userLogin(loginUser.getUid(), loginUser.getUser_password());
+    }
+
+    @GetMapping("/user/logout/{token}")
+    public String login(@PathVariable("token") String token) {
+        return loginService.userLogout(token);
     }
 }

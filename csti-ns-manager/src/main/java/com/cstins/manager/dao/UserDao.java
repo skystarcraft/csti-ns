@@ -17,4 +17,8 @@ public interface UserDao extends JpaRepository<User, Integer> {
     @Transactional
     @Query(value = "update user set type = 2 where uid = ?1", nativeQuery = true)
     int changeType(Integer uid);
+
+    User findByUidEquals(Integer uid);
+
+    boolean existsByUidEquals(Integer uid);
 }
