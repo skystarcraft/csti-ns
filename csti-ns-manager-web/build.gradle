@@ -36,12 +36,15 @@ dependencies {
     )
     compile group: 'io.vertx', name: 'vertx-core', version: '3.5.4'
     compile group: 'io.vertx', name: 'vertx-web', version: '3.5.4'
+    compile group: 'io.vertx', name: 'vertx-web-templ-thymeleaf', version: '3.5.4'
     compile group: 'io.vertx', name: 'vertx-web-client', version: '3.5.4'
     compile group: 'io.vertx', name: 'vertx-service-proxy', version: '3.5.4'
     compile group: 'io.vertx', name: 'vertx-codegen', version: '3.5.4'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compileOnly "org.springframework.boot:spring-boot-configuration-processor"
 //    compile group: 'org.projectlombok', name: 'lombok', version: '1.18.4'
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf', version: '2.1.3.RELEASE'
+
 
 }
 

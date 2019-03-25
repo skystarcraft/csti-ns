@@ -1,5 +1,7 @@
 package com.cstins.manager.api;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.manager.entity.*;
 import com.cstins.manager.service.FrontService;
 import com.cstins.manager.service.LinkService;
@@ -237,5 +239,27 @@ public class ManagerAPI {
     @GetMapping("/user/logout/{token}")
     public String login(@PathVariable("token") String token) {
         return loginService.userLogout(token);
+    }
+
+
+    @GetMapping("/all")
+    public JSONArray getAll() {
+        JSONArray jsonArray = new JSONArray();
+        List<User> users = managerService.getAllUser();
+        List<Article> articles = managerService.getArticles();
+        List<Tags> tags = managerService.getTags();
+        List<Link> links = linkService.getLinks();
+        Front front = frontService.findFront();
+//        jsonArray.add(new JSONObject().put("users", users));
+//        jsonArray.add(new JSONObject().put("articles", articles));
+//        jsonArray.add(new JSONObject().put("tags", tags));
+//        jsonArray.add(new JSONObject().put("links", links));
+//        jsonArray.add(new JSONObject().put("front", front));
+        jsonArray.add(users);
+        jsonArray.add(articles);
+        jsonArray.add(tags);
+        jsonArray.add(links);
+        jsonArray.add(front);
+        return jsonArray;
     }
 }

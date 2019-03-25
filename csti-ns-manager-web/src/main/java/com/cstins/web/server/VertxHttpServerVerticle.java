@@ -1,5 +1,7 @@
 package com.cstins.web.server;
 
+import com.cstins.web.router.RestApi;
+import com.cstins.web.server.handler.ArticleHandler;
 import com.cstins.web.server.meta.BlockedHandler;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Future;
@@ -23,7 +25,9 @@ public class VertxHttpServerVerticle extends AbstractVerticle {
 
         HttpServer server = vertx.createHttpServer();
         Router router = Router.router(vertx);
-        addHandlers(router, config.getHandlerMappings());
+        addHandlers(router, config.getHandlerMappings());         //从yaml文件中读取router
+
+        RestApi.api(router);                                      //路由列表
 
         server.requestHandler(router::accept)
                 .listen(config.getServer().getPort(), res -> {

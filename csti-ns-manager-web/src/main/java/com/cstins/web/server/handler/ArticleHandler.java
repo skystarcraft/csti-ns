@@ -3,12 +3,10 @@ package com.cstins.web.server.handler;
 import com.cstins.web.server.meta.BlockedHandler;
 import com.cstins.web.server.meta.GlobalHolder;
 import io.vertx.core.Vertx;
+import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
 import org.springframework.stereotype.Component;
-import io.vertx.ext.web.RoutingContext;
-import io.vertx.core.Handler;
-
 /**
  * @program: csti-ns
  * @description:
@@ -17,25 +15,24 @@ import io.vertx.core.Handler;
 
 @Component
 @BlockedHandler
-public class HomeHandler implements Handler<RoutingContext> {
+public class ArticleHandler{
 
     private static Vertx vertx = GlobalHolder.instance().getVertx();
-
     private static ThymeleafTemplateEngine templateEngine = GlobalHolder.instance().getTemplateEngine();
-
     private static WebClient webClient = WebClient.create(vertx);
 
-    @Override
-    public void handle(RoutingContext route) {
-        webClient.getAbs("http://localhost:8087/manager/all").send(result -> {
-            route.put("msg", result.result().body());
-            templateEngine.render(route, "templates/index.html", res -> {
-                if (res.succeeded()) {
-                    route.response().putHeader("Content-Type", "text/html").end(res.result());
-                } else {
-                    route.fail(res.cause());
-                }
-            });
+    public static void showArticles(RoutingContext route) {
+
+        webClient.getAbs("http://localhost:8087/manager/articles").send(res -> {
+            if (res.succeeded()) {
+                route.response().putHeader("Content-Type", "application/json").end(res.result().body());
+            } else {
+                route.fail(res.cause());
+            }
         });
+    }
+
+    public static void delArticle(RoutingContext route) {
+
     }
 }
