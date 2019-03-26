@@ -57,9 +57,9 @@ public class ResourceAPI {
     }
 
     @ResponseBody
-    @GetMapping("/res/download/{rid}")
-    public String downloadRes(@PathVariable("rid") Integer rid) {
-        return service.downloadRes(rid);
+    @GetMapping("/res/download/{rid}/user/{uid}")
+    public String downloadRes(@PathVariable("rid") Integer rid, @PathVariable("uid") Integer uid) {
+        return service.downloadRes(rid, uid);
     }
 
     @ResponseBody

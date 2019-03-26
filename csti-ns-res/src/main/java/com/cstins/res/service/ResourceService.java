@@ -37,6 +37,9 @@ public class ResourceService {
     @Autowired
     private FastFileStorageClient storageClient;
 
+    @Autowired
+    private UserService userService;
+
     private static final String REDISKEY = "csti:res";
 
     public boolean delRes(Integer rid) {
@@ -61,7 +64,7 @@ public class ResourceService {
         return true;
     }
 
-    public String downloadRes(Integer rid) {
+    public String downloadRes(Integer rid, Integer uid) {
         resourceDao.addDownload(rid);
         Resource resource = null;
         Object res = redisTemplate.opsForHash().get(REDISKEY, "res:" + rid);
@@ -74,7 +77,7 @@ public class ResourceService {
             redisTemplate.opsForHash().put(REDISKEY, "res:" + rid, jsonObject.toString());
         }
         Integer score = resource.getRscore();
-        //TODO 使用kafka通知user模块减积分
+        userService.reduceScore(score, uid);
         return resource.getRaddr();
     }
 
