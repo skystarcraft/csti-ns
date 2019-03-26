@@ -1,6 +1,6 @@
-package com.cstins.web.router;
+package com.cstins.front.web.router;
 
-import com.cstins.web.server.handler.ArticleHandler;
+import com.cstins.front.web.server.handler.ArticleHandler;
 import io.vertx.ext.web.Router;
 
 /**

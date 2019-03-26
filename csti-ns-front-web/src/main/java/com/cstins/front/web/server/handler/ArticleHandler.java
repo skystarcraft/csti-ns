@@ -1,12 +1,13 @@
-package com.cstins.web.server.handler;
+package com.cstins.front.web.server.handler;
 
-import com.cstins.web.server.meta.BlockedHandler;
-import com.cstins.web.server.meta.GlobalHolder;
+import com.cstins.front.web.server.meta.BlockedHandler;
+import com.cstins.front.web.server.meta.GlobalHolder;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.ThymeleafTemplateEngine;
 import org.springframework.stereotype.Component;
+
 /**
  * @program: csti-ns
  * @description:
