@@ -60,11 +60,23 @@ public class TagService {
     }
 
     public List<Tags> getAllTags() {
-        return tagsDao.findAll();
+        List<Tags> tags = null;
+        try {
+            tags = tagsDao.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tags;
     }
 
     public Tags getTag(Integer tid) {
-        return tagsDao.findById(tid).get();
+        Tags tags = null;
+        try {
+            tags = tagsDao.findById(tid).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tags;
     }
 
 }

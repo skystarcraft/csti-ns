@@ -1,5 +1,6 @@
 package com.cstins.comment.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.comment.entity.ArticleComment;
 import com.cstins.comment.service.ArticleCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,24 +22,73 @@ public class CommentAPI {
 
 
     @GetMapping("/comment/{aid}")
-    public List<ArticleComment> getCommentsByAid(@PathVariable("aid") Integer aid) {
-        return service.getArticleCommentsByAid(aid);
+    public JSONObject getCommentsByAid(@PathVariable("aid") Integer aid) {
+        List<ArticleComment> articleCommentsByAid = service.getArticleCommentsByAid(aid);
+        JSONObject jsonObject = new JSONObject();
+        if (articleCommentsByAid == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", articleCommentsByAid);
+        }
+        return jsonObject;
     }
 
     @GetMapping("/user/comment/{uid}")
-    public List<ArticleComment> getCommentsByUid(@PathVariable("uid") Integer uid) {
-        return service.getArticleCommentsByUid(uid);
+    public JSONObject getCommentsByUid(@PathVariable("uid") Integer uid) {
+        List<ArticleComment> comments = service.getArticleCommentsByUid(uid);
+        JSONObject jsonObject = new JSONObject();
+        if (comments == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", comments);
+        }
+        return jsonObject;
     }
 
     @PostMapping("/comment")
-    public boolean addComment(@RequestBody ArticleComment articleComment) {
-        if (articleComment == null) return false;
-        return service.addComment(articleComment);
+    public JSONObject addComment(@RequestBody ArticleComment articleComment) {
+        if (articleComment == null) {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "添加失败！");
+            jsonObject.put("data", "");
+            return jsonObject;
+        }
+        boolean b = service.addComment(articleComment);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "添加成功！");
+            jsonObject.put("data", articleComment);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "添加失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     @DeleteMapping("/comment")
-    public boolean delComment(@RequestBody ArticleComment articleComment) {
-        if (articleComment == null) return false;
-        return service.delComment(articleComment);
+    public JSONObject delComment(@RequestBody ArticleComment articleComment) {
+        boolean b = service.delComment(articleComment);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", articleComment);
+        }
+        return jsonObject;
     }
 }

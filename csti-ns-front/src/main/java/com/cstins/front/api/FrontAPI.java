@@ -1,5 +1,6 @@
 package com.cstins.front.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.front.entity.Front;
 import com.cstins.front.service.FrontService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,28 @@ public class FrontAPI {
     private FrontService frontService;
 
     @GetMapping("/about")
-    public Front getIntroduction() {
-        return frontService.findFront();
+    public JSONObject getIntroduction() {
+        Front front = frontService.findFront();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", front);
+        return jsonObject;
     }
 
     @PutMapping(value = "/about")
-    public boolean updateIntroduction(@RequestBody Front front) {
-        if (front == null) return false;
-        return frontService.updateFront(front);
+    public JSONObject updateIntroduction(@RequestBody Front front) {
+        boolean b = frontService.updateFront(front);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "更新成功！");
+            jsonObject.put("data", front);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "更新失败！");
+            jsonObject.put("data", front);
+        }
+        return jsonObject;
     }
 }

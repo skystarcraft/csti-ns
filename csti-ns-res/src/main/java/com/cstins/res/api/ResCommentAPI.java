@@ -1,5 +1,6 @@
 package com.cstins.res.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.res.entity.Comment;
 import com.cstins.res.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,20 +21,51 @@ public class ResCommentAPI {
     private CommentService commentService;
 
     @PostMapping("/res/comment")
-    public boolean addComment (@RequestBody Comment comment) {
-        if (comment == null) return false;
-        return commentService.addCopmment(comment);
+    public JSONObject addComment (@RequestBody Comment comment) {
+        boolean b = commentService.addCopmment(comment);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "添加成功！");
+            jsonObject.put("data", comment);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "添加失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     @DeleteMapping("/res/comment")
-    public boolean delComment (@RequestBody Comment comment) {
-        if (comment == null) return false;
-        return commentService.delComment(comment);
+    public JSONObject delComment (@RequestBody Comment comment) {
+        boolean b = commentService.delComment(comment);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", comment);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     @GetMapping("/res/comments/{rid}")
-    public List<Comment> getAllCommentsByRid (@PathVariable("rid") Integer rid) {
-        return commentService.getAllCommentByRid(rid);
+    public JSONObject getAllCommentsByRid (@PathVariable("rid") Integer rid) {
+        List<Comment> comment = commentService.getAllCommentByRid(rid);
+        JSONObject jsonObject = new JSONObject();
+        if (comment == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", comment);
+        }
+        return jsonObject;
     }
 
 }

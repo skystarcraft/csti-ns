@@ -47,7 +47,7 @@ public class SsoService {
                 return token;
             }
         }
-        return "login failed!";
+        return "failed";
     }
 
     public String userLogout(String token) {

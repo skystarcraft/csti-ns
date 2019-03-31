@@ -1,5 +1,6 @@
 package com.cstins.res.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.res.entity.Resource;
 import com.cstins.res.service.ResourceService;
 import org.apache.commons.io.FilenameUtils;
@@ -29,8 +30,9 @@ public class ResourceAPI {
 
     @ResponseBody
     @PostMapping("/res/uploadToFast")
-    public String uploadRes (@RequestParam("fileName") MultipartFile file) {
+    public JSONObject uploadRes (@RequestParam("fileName") MultipartFile file) {
         String fallback = null;
+        JSONObject jsonObject = new JSONObject();
         try {
             String suffix = FilenameUtils.getExtension(file.getOriginalFilename());
             if ("jpg".equals(suffix) || "jpeg".equals(suffix) || "png".equals(suffix)) {
@@ -38,34 +40,72 @@ public class ResourceAPI {
             } else {
                 fallback = service.uploadFile(file);
             }
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "上传成功！");
+            jsonObject.put("data", "");
         } catch (Exception e) {
             e.printStackTrace();
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "上传失败！");
+            jsonObject.put("data", "");
         }
-        return fallback;
+        return jsonObject;
     }
 
     @ResponseBody
     @PostMapping("/res/resource")
-    public boolean uploadRes2 (@RequestBody Resource resource) {
-        return service.uploadRes(resource);
+    public JSONObject uploadRes2 (@RequestBody Resource resource) {
+        boolean b = service.uploadRes(resource);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "上传成功！");
+            jsonObject.put("data", resource);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "上传失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     @ResponseBody
     @GetMapping("/res/{rid}")
-    public Resource getRes(@PathVariable("rid") Integer rid) {
-        return service.getRes(rid);
+    public JSONObject getRes(@PathVariable("rid") Integer rid) {
+        Resource res = service.getRes(rid);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", res);
+        return jsonObject;
     }
 
     @ResponseBody
     @GetMapping("/res/download/{rid}/user/{uid}")
-    public String downloadRes(@PathVariable("rid") Integer rid, @PathVariable("uid") Integer uid) {
-        return service.downloadRes(rid, uid);
+    public JSONObject downloadRes(@PathVariable("rid") Integer rid, @PathVariable("uid") Integer uid) {
+        String path = service.downloadRes(rid, uid);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", path);
+        return jsonObject;
     }
 
     @ResponseBody
     @DeleteMapping("/res/{rid}")
-    public boolean delRes (@PathVariable("rid") Integer rid) {
-        return service.delRes(rid);
+    public JSONObject delRes (@PathVariable("rid") Integer rid) {
+        boolean b = service.delRes(rid);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", rid);
+        }
+        return jsonObject;
     }
 
 }

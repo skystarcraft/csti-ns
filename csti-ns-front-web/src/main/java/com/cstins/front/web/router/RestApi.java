@@ -12,7 +12,7 @@ public class RestApi {
 
     public static void api(Router router) {
         router.get("/manager/articles").handler(ctx -> ArticleHandler.showArticles(ctx));
-        router.delete("/manager/article/:aid").handler(ctx -> {ArticleHandler.delArticle(ctx);});
+        router.delete("/manager/article/:aid").handler(ctx -> ArticleHandler.delArticle(ctx));
     }
 
 }

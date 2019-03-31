@@ -1,5 +1,6 @@
 package com.cstins.xpay.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.xpay.entity.Integral_price;
 import com.cstins.xpay.service.AliPayService;
 import com.cstins.xpay.service.OrderService;
@@ -56,7 +57,8 @@ public class XpayAPI {
      */
     @GetMapping("/receive")
     @ResponseBody
-    public boolean receiveData(@RequestParam("total_amount") String amount, @RequestParam("out_trade_no") String oid) {
+    public JSONObject receiveData(@RequestParam("total_amount") String amount, @RequestParam("out_trade_no") String oid) {
+        JSONObject jsonObject = new JSONObject();
         if (amount != null) {
             try {
                 Integer money = new Double(Double.parseDouble(amount)).intValue();
@@ -65,12 +67,17 @@ public class XpayAPI {
                 userService.addUintegral(score, uid);
                 orderService.createOrder(order_id, uid, new Date(), money);
                 uid = null;
+                jsonObject.put("code", 200);
+                jsonObject.put("msg", "支付成功！");
+                jsonObject.put("data", amount);
             } catch (Exception e) {
                 e.printStackTrace();
-                return false;
+                jsonObject.put("code", 400);
+                jsonObject.put("msg", "支付失败！");
+                jsonObject.put("data", amount);
             }
         }
-        return true;
+        return jsonObject;
     }
 
     /**

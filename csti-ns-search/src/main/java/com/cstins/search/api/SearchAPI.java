@@ -1,5 +1,6 @@
 package com.cstins.search.api;
 
+import com.alibaba.fastjson.JSONObject;
 import com.cstins.search.dao.ArticleDao;
 import com.cstins.search.entity.Article;
 import com.cstins.search.entity.ArticleMysql;
@@ -32,8 +33,13 @@ public class SearchAPI {
      * @return
      */
     @GetMapping("/get/{id}")
-    public Article searchArticle(@PathVariable("id") Integer id) {
-        return articleDao.findById(id).get();
+    public JSONObject searchArticle(@PathVariable("id") Integer id) {
+        Article article = articleDao.findById(id).get();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", article);
+        return jsonObject;
     }
 
     /**
@@ -41,24 +47,33 @@ public class SearchAPI {
      * @return
      */
     @GetMapping("/select/{text}")
-    public List<Article> searchArticles(@PathVariable("text") String text) {
+    public JSONObject searchArticles(@PathVariable("text") String text) {
+        JSONObject jsonObject = new JSONObject();
         QueryStringQueryBuilder builder = new QueryStringQueryBuilder(text);
         Iterable<Article> search = articleDao.search(builder);
         List<Article> list = new ArrayList<>();
         search.forEach(article -> {
             list.add(article);
         });
-        return list;
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", list);
+        return jsonObject;
     }
 
     @PostMapping("/insert")
-    public Article insertArticle(@RequestBody Article article) {
-        articleDao.save(article);
-        return article;
+    public JSONObject insertArticle(@RequestBody Article article) {
+        Article save = articleDao.save(article);
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "插入成功！");
+        jsonObject.put("data", save);
+        return jsonObject;
     }
 
     @PostMapping("/inserts")
-    public boolean insertAllArticles() {
+    public JSONObject insertAllArticles() {
+        JSONObject jsonObject = new JSONObject();
         try {
             List<ArticleMysql> articles = service.getAll();
             for (int i = 0; i < articles.size(); i++) {
@@ -72,17 +87,26 @@ public class SearchAPI {
                 article.setArticle_date(articleMysql.getArticle_date());
                 articleDao.save(article);
             }
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "插入成功！");
+            jsonObject.put("data", "");
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "插入失败！");
+            jsonObject.put("data", e.getMessage());
         }
-        return true;
+        return jsonObject;
     }
 
     @DeleteMapping("/del/{id}")
-    public Article delArticle(@PathVariable("id") Integer id) {
+    public JSONObject delArticle(@PathVariable("id") Integer id) {
         Article article = articleDao.findById(id).get();
         articleDao.delete(article);
-        return article;
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "删除成功！");
+        jsonObject.put("data", "");
+        return jsonObject;
     }
 }
