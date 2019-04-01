@@ -89,4 +89,12 @@ public class Article implements Serializable {
 
     public Article() {
     }
+
+    public Article(String article_title, String article_context, Integer article_view, Integer uid, Date article_date) {
+        this.article_title = article_title;
+        this.article_context = article_context;
+        this.article_view = article_view;
+        this.uid = uid;
+        this.article_date = article_date;
+    }
 }

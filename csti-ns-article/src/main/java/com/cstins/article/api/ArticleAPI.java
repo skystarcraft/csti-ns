@@ -45,9 +45,15 @@ public class ArticleAPI {
     public JSONObject getArticle(@PathVariable("aid") Integer aid) {
         Article article = articleService.getArticle(aid);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", 200);
-        jsonObject.put("msg", "获取成功！");
-        jsonObject.put("data", article);
+        if (article == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "文章不存在！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取成功！");
+            jsonObject.put("data", article);
+        }
         return jsonObject;
     }
 

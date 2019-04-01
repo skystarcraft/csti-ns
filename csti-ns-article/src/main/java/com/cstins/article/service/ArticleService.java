@@ -5,6 +5,7 @@ import com.cstins.article.dao.ArticleTagDao;
 import com.cstins.article.entity.Article;
 import com.cstins.article.entity.Tags;
 import com.cstins.article.tools.JsonDateValueProcessor;
+import com.google.gson.JsonObject;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -67,11 +68,19 @@ public class ArticleService {
             Article a = (Article) JSONObject.toBean(jsonObject, Article.class);
             return a;
         } else {
-            Article article1 = articleDao.findById(id).get();
-            new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
-            JSONObject jsonObject = JSONObject.fromObject(article1);
-            redisTemplate.opsForHash().put(REDISKEY, id + "", jsonObject.toString());
-            return article1;
+            try {
+                Article article1 = articleDao.findById(id).get();
+                new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
+                JSONObject jsonObject = JSONObject.fromObject(article1);
+                redisTemplate.opsForHash().put(REDISKEY, id + "", jsonObject.toString());
+                return article1;
+            } catch (Exception e) {
+                Article article1 = new Article("大胸弟你迷路了", "文章不存在", 0, 0, new java.util.Date());
+                new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
+                JSONObject jsonObject = JSONObject.fromObject(article1);
+                redisTemplate.opsForHash().put(REDISKEY, id + "", jsonObject.toString());
+            }
+            return null;
         }
     }
 

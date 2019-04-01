@@ -16,7 +16,7 @@ public interface ArticleCommentDao extends JpaRepository<ArticleComment, Integer
      * @param aid
      * @return
      */
-    List<ArticleComment> getAllByAidEquals(Integer aid);
+    List<ArticleComment> findAllByAidEquals(Integer aid);
 
 
     /**
@@ -24,7 +24,7 @@ public interface ArticleCommentDao extends JpaRepository<ArticleComment, Integer
      * @param uid
      * @return
      */
-    List<ArticleComment> getAllByUidEquals(Integer uid);
+    List<ArticleComment> findAllByUidEquals(Integer uid);
 
     @Transactional
     @Modifying

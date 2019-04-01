@@ -54,7 +54,7 @@ public class ArticleCommentService {
 
     public List<ArticleComment> getArticleCommentsByAid(Integer aid) {
         List<ArticleComment> list = null;
-        Object comments = redisTemplate.opsForHash().get(REDISKEY, "commentsByAid");
+        Object comments = redisTemplate.opsForHash().get(REDISKEY, "commentsByAid" + aid);
         if (comments != null && !"".equals(comments) && !"null".equals(comments)) {
             list = new ArrayList<>();
             JSONArray jsonArray = JSONArray.fromObject(comments);
@@ -64,16 +64,16 @@ public class ArticleCommentService {
                 list.add(articleComment);
             }
         } else {
-            list = articleCommentDao.getAllByAidEquals(aid);
+            list = articleCommentDao.findAllByAidEquals(aid);
             JSONArray jsonArray = JSONArray.fromObject(list);
-            redisTemplate.opsForHash().put(REDISKEY, "commentsByAid", jsonArray.toString());
+            redisTemplate.opsForHash().put(REDISKEY, "commentsByAid" + aid, jsonArray.toString());
         }
         return list;
     }
 
     public List<ArticleComment> getArticleCommentsByUid(Integer uid) {
         List<ArticleComment> list = null;
-        Object comments = redisTemplate.opsForHash().get(REDISKEY, "commentsByUid");
+        Object comments = redisTemplate.opsForHash().get(REDISKEY, "commentsByUid" + uid);
         if (comments != null && !"".equals(comments) && !"null".equals(comments)) {
             list = new ArrayList<>();
             JSONArray jsonArray = JSONArray.fromObject(comments);
@@ -83,9 +83,9 @@ public class ArticleCommentService {
                 list.add(articleComment);
             }
         } else {
-            list = articleCommentDao.getAllByUidEquals(uid);
+            list = articleCommentDao.findAllByUidEquals(uid);
             JSONArray jsonArray = JSONArray.fromObject(list);
-            redisTemplate.opsForHash().put(REDISKEY, "commentsByUid", jsonArray.toString());
+            redisTemplate.opsForHash().put(REDISKEY, "commentsByUid" + uid, jsonArray.toString());
         }
         return list;
     }
