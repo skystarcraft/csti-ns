@@ -3,9 +3,7 @@ package com.cstins.article.service;
 import com.cstins.article.dao.ArticleDao;
 import com.cstins.article.dao.ArticleTagDao;
 import com.cstins.article.entity.Article;
-import com.cstins.article.entity.Tags;
 import com.cstins.article.tools.JsonDateValueProcessor;
-import com.google.gson.JsonObject;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
@@ -82,6 +80,16 @@ public class ArticleService {
             }
             return null;
         }
+    }
+
+    public List<Article> getArticlesByUid(Integer uid) {
+        List<Article> articles = null;
+        try {
+            articles = articleDao.findAllByUidEquals(uid);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return articles;
     }
 
     public boolean addOrUpdateArticle(Article article) {

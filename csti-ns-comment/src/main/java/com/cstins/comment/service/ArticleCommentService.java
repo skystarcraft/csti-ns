@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class ArticleCommentService {
     public boolean addComment(ArticleComment articleComment) {
         if (articleComment == null) return false;
         int result = articleCommentDao.addComment(articleComment.getAid(), articleComment.getUid(),
-                articleComment.getArticle_context(), articleComment.getCdate());
+                articleComment.getArticle_context(), new Date());
         if (result > 0) {
             redisTemplate.opsForHash().delete(REDISKEY, "commentsByAid");
             redisTemplate.opsForHash().delete(REDISKEY, "commentsByUid");

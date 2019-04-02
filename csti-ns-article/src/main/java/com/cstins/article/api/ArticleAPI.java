@@ -8,6 +8,7 @@ import com.cstins.article.service.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -57,6 +58,22 @@ public class ArticleAPI {
         return jsonObject;
     }
 
+    @GetMapping("/my/article/{uid}")
+    public JSONObject getArticleByUid(@PathVariable("uid") Integer uid) {
+        List<Article> articles = articleService.getArticlesByUid(uid);
+        JSONObject jsonObject = new JSONObject();
+        if (articles == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "您没有写文章！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取成功！");
+            jsonObject.put("data", articles);
+        }
+        return jsonObject;
+    }
+
     @PutMapping("/article")
     public JSONObject updateArticle(@RequestBody Article article) {
         boolean b = articleService.addOrUpdateArticle(article);
@@ -76,15 +93,16 @@ public class ArticleAPI {
     @PostMapping("/article")
     public JSONObject addArticle(@RequestBody Article article) {
         article.setArticle_view(0);
+        article.setArticle_date(new Date());
         boolean b = articleService.addOrUpdateArticle(article);
         JSONObject jsonObject = new JSONObject();
         if (b) {
             jsonObject.put("code", 200);
-            jsonObject.put("msg", "添加成功！");
+            jsonObject.put("msg", "发布成功！");
             jsonObject.put("data", article);
         } else {
             jsonObject.put("code", 400);
-            jsonObject.put("msg", "添加失败！");
+            jsonObject.put("msg", "发布失败！");
             jsonObject.put("data", article);
         }
         return jsonObject;
@@ -92,6 +110,23 @@ public class ArticleAPI {
 
     @DeleteMapping("/article")
     public JSONObject delArticle(@RequestBody Article article) {
+        boolean b = articleService.delArticle(article);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", article);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", article);
+        }
+        return jsonObject;
+    }
+
+    @GetMapping("/del/article/{aid}")
+    public JSONObject delArticle(@PathVariable("aid") Integer aid) {
+        Article article = articleService.getArticle(aid);
         boolean b = articleService.delArticle(article);
         JSONObject jsonObject = new JSONObject();
         if (b) {

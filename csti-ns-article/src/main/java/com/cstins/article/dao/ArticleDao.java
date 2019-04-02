@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Transactional
 public interface ArticleDao extends JpaRepository<Article, Integer> {
 
@@ -16,4 +18,5 @@ public interface ArticleDao extends JpaRepository<Article, Integer> {
     @Query(value = "update article set article_view = article_view + 1 where article_id = ?1", nativeQuery = true)
     int addArticleView(Integer aid);
 
+    List<Article> findAllByUidEquals(Integer uid);
 }
