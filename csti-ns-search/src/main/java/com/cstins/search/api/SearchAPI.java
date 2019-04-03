@@ -18,7 +18,6 @@ import java.util.List;
  * @author: 杨云龙
  **/
 @RestController
-@RequestMapping("/search")
 public class SearchAPI {
 
     @Autowired
@@ -26,6 +25,15 @@ public class SearchAPI {
 
     @Autowired
     private ArticleService service;
+
+    /**
+     * 写这个没用的方法是因为vue设置代理要必须能访问
+     * @return
+     */
+    @RequestMapping("/")
+    public String index() {
+        return "";
+    }
 
     /**
      * 查 id
@@ -61,13 +69,19 @@ public class SearchAPI {
         return jsonObject;
     }
 
-    @PostMapping("/insert")
+    @PostMapping("/addes")
     public JSONObject insertArticle(@RequestBody Article article) {
-        Article save = articleDao.save(article);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("code", 200);
-        jsonObject.put("msg", "插入成功！");
-        jsonObject.put("data", save);
+        try {
+            Article save = articleDao.save(article);
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "插入成功！");
+            jsonObject.put("data", save);
+        } catch (Exception e) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "插入失败！");
+            jsonObject.put("data", "");
+        }
         return jsonObject;
     }
 

@@ -16,7 +16,7 @@ public interface ArticleCommentDao extends JpaRepository<ArticleComment, Integer
      * @param aid
      * @return
      */
-    List<ArticleComment> findAllByAidEquals(Integer aid);
+    List<ArticleComment> findAllByAidEqualsOrderByCdateDesc(Integer aid);
 
 
     /**

@@ -32,12 +32,12 @@ public class ArticleCommentService {
     private StringRedisTemplate redisTemplate;
 
     public boolean addComment(ArticleComment articleComment) {
-        if (articleComment == null) return false;
+        if (articleComment == null || articleComment.getUid() == null || "".equals(articleComment.getUid())) return false;
         int result = articleCommentDao.addComment(articleComment.getAid(), articleComment.getUid(),
                 articleComment.getArticle_context(), new Date());
         if (result > 0) {
-            redisTemplate.opsForHash().delete(REDISKEY, "commentsByAid");
-            redisTemplate.opsForHash().delete(REDISKEY, "commentsByUid");
+            redisTemplate.opsForHash().delete(REDISKEY, "commentsByAid" + articleComment.getAid());
+            redisTemplate.opsForHash().delete(REDISKEY, "commentsByUid" + articleComment.getAid());
             return true;
         }
         return false;
@@ -65,7 +65,7 @@ public class ArticleCommentService {
                 list.add(articleComment);
             }
         } else {
-            list = articleCommentDao.findAllByAidEquals(aid);
+            list = articleCommentDao.findAllByAidEqualsOrderByCdateDesc(aid);
             JSONArray jsonArray = JSONArray.fromObject(list);
             redisTemplate.opsForHash().put(REDISKEY, "commentsByAid" + aid, jsonArray.toString());
         }

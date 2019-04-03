@@ -92,17 +92,23 @@ public class ArticleAPI {
 
     @PostMapping("/article")
     public JSONObject addArticle(@RequestBody Article article) {
-        article.setArticle_view(0);
-        article.setArticle_date(new Date());
-        boolean b = articleService.addOrUpdateArticle(article);
         JSONObject jsonObject = new JSONObject();
-        if (b) {
-            jsonObject.put("code", 200);
-            jsonObject.put("msg", "发布成功！");
-            jsonObject.put("data", article);
+        if (article.getUid() != null && !"".equals(article.getUid())) {
+            article.setArticle_view(0);
+            article.setArticle_date(new Date());
+            boolean b = articleService.addOrUpdateArticle(article);
+            if (b) {
+                jsonObject.put("code", 200);
+                jsonObject.put("msg", "发布成功！");
+                jsonObject.put("data", article);
+            } else {
+                jsonObject.put("code", 400);
+                jsonObject.put("msg", "发布失败！");
+                jsonObject.put("data", article);
+            }
         } else {
             jsonObject.put("code", 400);
-            jsonObject.put("msg", "发布失败！");
+            jsonObject.put("msg", "发布失败！,请先登录在发布文章！");
             jsonObject.put("data", article);
         }
         return jsonObject;

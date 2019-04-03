@@ -41,7 +41,7 @@ public class SSOAPI {
         JSONObject jsonObject = new JSONObject();
         if (user == null) {
             jsonObject.put("code", 400);
-            jsonObject.put("msg", "获取token失败");
+            jsonObject.put("msg", "请重新登陆");
             jsonObject.put("data", "请重新登陆");
         } else {
             jsonObject.put("code", 200);

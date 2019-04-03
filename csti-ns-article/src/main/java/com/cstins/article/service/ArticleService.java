@@ -99,6 +99,7 @@ public class ArticleService {
         new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
         JSONObject jsonObject = JSONObject.fromObject(article);
         redisTemplate.opsForHash().put(REDISKEY, article.getArticle_id() + "", jsonObject.toString());
+        redisTemplate.opsForHash().delete(REDISKEY, "articles");
         return true;
     }
 
