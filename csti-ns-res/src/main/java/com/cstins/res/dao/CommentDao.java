@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface CommentDao extends JpaRepository<Comment, Integer> {
 
-    List<Comment> findAllByRidEquals(Integer rid);
+    List<Comment> findAllByRidEqualsOrderByCtimeDesc(Integer rid);
 
     @Modifying
     @Transactional

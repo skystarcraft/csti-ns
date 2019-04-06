@@ -18,7 +18,7 @@ public class NaxinAPI {
     @Autowired
     private NaxinService naxinService;
 
-    @GetMapping("/front/naxin/{uid}")
+    @GetMapping("/naxin/{uid}")
     public JSONObject naxin(@PathVariable("uid") Integer uid) {
         boolean b = naxinService.naxin(uid);
         JSONObject jsonObject = new JSONObject();

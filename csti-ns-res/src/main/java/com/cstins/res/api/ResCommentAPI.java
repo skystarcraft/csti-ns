@@ -6,6 +6,7 @@ import com.cstins.res.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,15 +23,16 @@ public class ResCommentAPI {
 
     @PostMapping("/res/comment")
     public JSONObject addComment (@RequestBody Comment comment) {
+        comment.setCtime(new Date());
         boolean b = commentService.addCopmment(comment);
         JSONObject jsonObject = new JSONObject();
         if (b) {
             jsonObject.put("code", 200);
-            jsonObject.put("msg", "添加成功！");
+            jsonObject.put("msg", "评论成功！");
             jsonObject.put("data", comment);
         } else {
             jsonObject.put("code", 400);
-            jsonObject.put("msg", "添加失败！");
+            jsonObject.put("msg", "评论失败！");
             jsonObject.put("data", "");
         }
         return jsonObject;

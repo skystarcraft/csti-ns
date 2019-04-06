@@ -40,6 +40,16 @@ public class Resource {
     public Resource() {
     }
 
+    public Resource(String rname, Integer rscore, Integer rdownload, Double rstar, Integer ruid, String raddr, String payaddr) {
+        this.rname = rname;
+        this.rscore = rscore;
+        this.rdownload = rdownload;
+        this.rstar = rstar;
+        this.ruid = ruid;
+        this.raddr = raddr;
+        this.payaddr = payaddr;
+    }
+
     public Integer getRid() {
         return rid;
     }

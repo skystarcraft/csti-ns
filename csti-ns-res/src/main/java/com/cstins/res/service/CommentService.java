@@ -34,7 +34,7 @@ public class CommentService {
         if (comment == null) return false;
         try {
             commentDao.addComment(comment.getRid(), comment.getUid(), comment.getComment_context(), comment.getCtime());
-            redisTemplate.opsForHash().delete(REDISKEY, "resComment");
+            redisTemplate.opsForHash().delete(REDISKEY, "resComment" + comment.getRid());
         } catch (Exception e) {
             return false;
         }
@@ -45,7 +45,7 @@ public class CommentService {
         if (comment == null) return false;
         try {
             commentDao.delete(comment);
-            redisTemplate.opsForHash().delete(REDISKEY, "resComment");
+            redisTemplate.opsForHash().delete(REDISKEY, "resComment" + comment.getRid());
         } catch (Exception e) {
             return false;
         }
@@ -54,7 +54,7 @@ public class CommentService {
 
     public List<Comment> getAllCommentByRid (Integer rid) {
         List<Comment> list = null;
-        Object resComment = redisTemplate.opsForHash().get(REDISKEY, "resComment");
+        Object resComment = redisTemplate.opsForHash().get(REDISKEY, "resComment" + rid);
         if (resComment != null && !"".equals(resComment) && !"null".equals(resComment)) {
             list = new ArrayList<>();
             JSONArray jsonArray = JSONArray.fromObject(resComment);
@@ -64,9 +64,9 @@ public class CommentService {
                 list.add(comment);
             }
         } else {
-            list = commentDao.findAllByRidEquals(rid);
+            list = commentDao.findAllByRidEqualsOrderByCtimeDesc(rid);
             JSONArray jsonArray = JSONArray.fromObject(list);
-            redisTemplate.opsForHash().put(REDISKEY, "resComment", jsonArray.toString());
+            redisTemplate.opsForHash().put(REDISKEY, "resComment" + rid, jsonArray.toString());
         }
         return list;
     }

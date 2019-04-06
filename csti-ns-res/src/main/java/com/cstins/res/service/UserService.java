@@ -19,8 +19,13 @@ public class UserService {
 
     public boolean reduceScore(Integer score, Integer uid) {
         try {
-            userDao.reduce_points(score, uid);
-            return true;
+            Integer uintegral = userDao.findById(uid).get().getUintegral();
+            if (uintegral >= score) {
+                userDao.reduce_points(score, uid);
+                return true;
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

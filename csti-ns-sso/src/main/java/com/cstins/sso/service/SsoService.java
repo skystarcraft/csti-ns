@@ -43,7 +43,7 @@ public class SsoService {
                 new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
                 JSONObject jsonObject = JSONObject.fromObject(user);
                 redisTemplate.opsForValue().set("SESSION:" + token, jsonObject.toString());
-                redisTemplate.expire("SESSION:" + token, 15 * 60, TimeUnit.SECONDS);    //15分钟过期
+                redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //30分钟过期
                 return token;
             }
         }
@@ -68,7 +68,7 @@ public class SsoService {
         if (StringUtils.isNotBlank(result) && StringUtils.isNotEmpty(result)) {
             JSONObject jsonObject = JSONObject.fromObject(result);
             User user = (User) JSONObject.toBean(jsonObject, User.class);
-            redisTemplate.expire("SESSION:" + token, 15 * 60, TimeUnit.SECONDS);    //重置过期时间
+            redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //重置过期时间
             return user;
         }
         return null;

@@ -12,11 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.List;
 
 /**
  * @program: csti-ns
@@ -64,7 +64,8 @@ public class ResourceService {
         return true;
     }
 
-    public String downloadRes(Integer rid, Integer uid) {
+    public com.alibaba.fastjson.JSONObject downloadRes(Integer rid, Integer uid) {
+        com.alibaba.fastjson.JSONObject result = new com.alibaba.fastjson.JSONObject();
         resourceDao.addDownload(rid);
         Resource resource = null;
         Object res = redisTemplate.opsForHash().get(REDISKEY, "res:" + rid);
@@ -77,12 +78,35 @@ public class ResourceService {
             redisTemplate.opsForHash().put(REDISKEY, "res:" + rid, jsonObject.toString());
         }
         Integer score = resource.getRscore();
-        userService.reduceScore(score, uid);
-        return resource.getRaddr();
+        boolean b = userService.reduceScore(score, uid);
+        if (b) {
+            result.put("code", 200);
+            result.put("msg", "获取成功！");
+            result.put("data", resource.getRaddr());
+        } else {
+            result.put("code", 400);
+            result.put("msg", "积分不足！");
+            result.put("data", "");
+        }
+        return result;
     }
 
     public Resource getRes(Integer rid) {
-        return resourceDao.findById(rid).get();
+        Resource resource = null;
+        try {
+            resource = resourceDao.findById(rid).get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return resource;
+    }
+
+    public List<Resource> getAllRes() {
+        return resourceDao.findAll();
+    }
+
+    public List<Resource> getAllResByUid(Integer uid) {
+        return resourceDao.findAllByRuidEquals(uid);
     }
 
     /**
@@ -90,7 +114,7 @@ public class ResourceService {
      * @param file
      * @return
      * @throws IOException
-     * TODO FastDFS服务器上传出错，提示为参数错误？？？
+     *
      */
     public String uploadFile(MultipartFile file) {
         StorePath storePath = null;
