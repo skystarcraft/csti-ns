@@ -75,6 +75,27 @@ public class SsoService {
     }
 
     /**
+     * 更新token
+     * @param token
+     * @return
+     */
+    public User updateToken(String token) {
+        String result = redisTemplate.opsForValue().get("SESSION:" + token);
+        if (StringUtils.isNotBlank(result) && StringUtils.isNotEmpty(result)) {
+            JSONObject jsonObject = JSONObject.fromObject(result);
+            User user = (User) JSONObject.toBean(jsonObject, User.class);
+            User updateUser = userService.getUserByUid(user.getUid());
+            updateUser.setUser_password("");
+            new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
+            JSONObject js = JSONObject.fromObject(updateUser);
+            redisTemplate.opsForValue().set("SESSION:" + token, js.toString());
+            redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //重置过期时间
+            return user;
+        }
+        return null;
+    }
+
+    /**
      * 注册
      * @param user
      * @return
