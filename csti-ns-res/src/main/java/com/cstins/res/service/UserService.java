@@ -19,16 +19,24 @@ public class UserService {
 
     public boolean reduceScore(Integer score, Integer uid) {
         try {
-            Integer uintegral = userDao.findById(uid).get().getUintegral();
-            if (uintegral >= score) {
-                userDao.reduce_points(score, uid);
+
+            User user = userDao.findById(uid).get();
+            if (user.getType().equals(2) || user.getType() == 2) {
                 return true;
             } else {
-                return false;
+                Integer uintegral = user.getUintegral();
+                if (uintegral >= score) {
+                    userDao.reduce_points(score, uid);
+                    return true;
+                } else {
+                    return false;
+                }
             }
-        } catch (Exception e) {
+        } catch(Exception e){
             e.printStackTrace();
+
         }
+
         return false;
     }
 }
