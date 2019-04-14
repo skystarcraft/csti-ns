@@ -1,8 +1,10 @@
 package com.cstins.manager.service;
 
+import com.cstins.manager.dao.ApplyDao;
 import com.cstins.manager.dao.ArticleDao;
 import com.cstins.manager.dao.TagsDao;
 import com.cstins.manager.dao.UserDao;
+import com.cstins.manager.entity.Apply;
 import com.cstins.manager.entity.Article;
 import com.cstins.manager.entity.Tags;
 import com.cstins.manager.entity.User;
@@ -39,6 +41,9 @@ public class ManagerService {
 
     @Autowired
     private TagsDao tagsDao;
+
+    @Autowired
+    private ApplyDao applyDao;
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -255,5 +260,20 @@ public class ManagerService {
             e.printStackTrace();
         }
         return tags;
+    }
+
+    public List<User> getApplyUser() {
+        List<User> users = null;
+        try {
+            List<Apply> all = applyDao.findAll();
+            List<Integer> applys = new ArrayList<>();
+            all.forEach(apply -> {
+                applys.add(apply.getAppid());
+            });
+            users = userDao.findAllByUidIn(applys);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 }

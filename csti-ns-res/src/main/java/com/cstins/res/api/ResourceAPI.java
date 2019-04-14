@@ -48,6 +48,27 @@ public class ResourceAPI {
     }
 
     @ResponseBody
+    @PostMapping("/uploadimg")
+    public JSONObject uploadImg (@RequestParam("fileName") MultipartFile file) {
+        String fallback = null;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            String suffix = FilenameUtils.getExtension(file.getOriginalFilename());
+            fallback = service.uploadFile(file);
+            String url = "http://134.175.68.126:9999/" + fallback;
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "上传成功！");
+            jsonObject.put("data", url);
+        } catch (Exception e) {
+            e.printStackTrace();
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "上传失败！");
+            jsonObject.put("data", fallback);
+        }
+        return jsonObject;
+    }
+
+    @ResponseBody
     @PostMapping("/uploadToFast")
     public JSONObject uploadRes (@RequestParam("file") MultipartFile file, @RequestParam(value = "uid") Integer uid) {
         String fallback = null;

@@ -126,11 +126,11 @@ public class ManagerAPI {
         boolean b = managerService.addTag(tag.getTag_name());
         if (b) {
             jsonObject.put("code", 200);
-            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("msg", "添加成功！");
             jsonObject.put("data", "");
         } else {
             jsonObject.put("code", 400);
-            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("msg", "添加失败！");
             jsonObject.put("data", "");
         }
         return jsonObject;
@@ -497,7 +497,21 @@ public class ManagerAPI {
         return jsonObject;
     }
 
-
+    @GetMapping("/apply")
+    public JSONObject getAllApplys() {
+        JSONObject jsonObject = new JSONObject();
+        List<User> users = managerService.getApplyUser();
+        if (users == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", users);
+        }
+        return jsonObject;
+    }
 
     @GetMapping("/all")
     public JSONArray getAll() {

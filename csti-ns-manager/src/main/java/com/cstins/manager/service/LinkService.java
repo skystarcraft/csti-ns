@@ -53,7 +53,8 @@ public class LinkService {
     public boolean addLink(Link link) {
         if (link == null) return false;
         try {
-            linkDao.addLink(link.getLink_name(), link.getLink_addr());
+//            linkDao.addLink(link.getLink_name(), link.getLink_addr());
+            linkDao.save(link);
             redisTemplate.opsForHash().delete(REDISKEY, "links");
         } catch (Exception e) {
             return false;
@@ -64,7 +65,8 @@ public class LinkService {
     public boolean updateLink(Link link) {
         if (link == null) return false;
         try {
-            linkDao.updateLink(link.getLink_name(), link.getLink_addr(), link.getId());
+//            linkDao.updateLink(link.getLink_name(), link.getLink_addr(), link.getId());
+            linkDao.save(link);
             redisTemplate.opsForHash().delete(REDISKEY, "links");
         } catch (Exception e) {
             return false;

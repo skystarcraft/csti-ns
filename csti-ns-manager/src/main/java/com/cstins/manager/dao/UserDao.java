@@ -21,4 +21,6 @@ public interface UserDao extends JpaRepository<User, Integer> {
     User findByUidEquals(Integer uid);
 
     boolean existsByUidEquals(Integer uid);
+
+    List<User> findAllByUidIn(List<Integer> list);
 }
