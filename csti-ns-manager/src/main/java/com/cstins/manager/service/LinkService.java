@@ -83,6 +83,17 @@ public class LinkService {
         return true;
     }
 
+    public boolean delLnk(Integer id) {
+        try {
+            Link link = linkDao.findById(id).get();
+            linkDao.delete(link);
+            redisTemplate.opsForHash().delete(REDISKEY, "links");
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean delLinks(String[] link) {
         if (link == null) return false;
         try {

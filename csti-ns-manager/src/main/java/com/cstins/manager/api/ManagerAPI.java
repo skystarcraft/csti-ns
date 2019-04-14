@@ -19,7 +19,6 @@ import java.util.List;
  **/
 
 @RestController
-@RequestMapping("/manager")
 public class ManagerAPI {
 
     @Autowired
@@ -39,8 +38,19 @@ public class ManagerAPI {
      * @return
      */
     @GetMapping("/articles")
-    public List<Article> getArticles() {
-        return managerService.getArticles();
+    public JSONObject getArticles() {
+        JSONObject jsonObject = new JSONObject();
+        List<Article> articles = managerService.getArticles();
+        if (articles == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取文章列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取文章列表成功！");
+            jsonObject.put("data", articles);
+        }
+        return jsonObject;
     }
 
     /**
@@ -49,8 +59,19 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/article/{aid}")
-    public boolean delArticle(@PathVariable("aid") Integer aid) {
-        return managerService.delArticle(aid);
+    public JSONObject delArticle(@PathVariable("aid") Integer aid) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.delArticle(aid);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -59,8 +80,19 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/articles/{list}")
-    public boolean delArticles(@PathVariable("list") String[] list) {
-        return managerService.delArticles(list);
+    public JSONObject delArticles(@PathVariable("list") String[] list) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.delArticles(list);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -68,8 +100,19 @@ public class ManagerAPI {
      * @return
      */
     @GetMapping("/tags")
-    public List<Tags> getTags() {
-        return managerService.getTags();
+    public JSONObject getTags() {
+        JSONObject jsonObject = new JSONObject();
+        List<Tags> tags = managerService.getTags();
+        if (tags == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", tags);
+        }
+        return jsonObject;
     }
 
     /**
@@ -78,8 +121,19 @@ public class ManagerAPI {
      * @return
      */
     @PostMapping("/tag")
-    public boolean addTag (@RequestBody Tags tag) {
-        return managerService.addTag(tag.getTag_name());
+    public JSONObject addTag (@RequestBody Tags tag) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.addTag(tag.getTag_name());
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -88,8 +142,19 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/tag/{tid}")
-    public boolean delOneTag(@PathVariable("tid") String[] tid) {
-        return managerService.delTags(tid);
+    public JSONObject delOneTag(@PathVariable("tid") Integer tid) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.delTag(tid);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -98,8 +163,19 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/tags/{list}")
-    public boolean delTags(@PathVariable("list") String[] list) {
-        return managerService.delTags(list);
+    public JSONObject delTags(@PathVariable("list") String[] list) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.delTags(list);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -107,8 +183,19 @@ public class ManagerAPI {
      * @return
      */
     @GetMapping("/allusers")
-    public List<User> getAllUser() {
-        return managerService.getAllUser();
+    public JSONObject getAllUser() {
+        JSONObject jsonObject = new JSONObject();
+        List<User> users = managerService.getAllUser();
+        if (users == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", users);
+        }
+        return jsonObject;
     }
 
     /**
@@ -116,8 +203,19 @@ public class ManagerAPI {
      * @return
      */
     @GetMapping("/groupuser")
-    public List<User> getGroupUser() {
-        return managerService.getUsers();
+    public JSONObject getGroupUser() {
+        JSONObject jsonObject = new JSONObject();
+        List<User> users = managerService.getUsers();
+        if (users == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取列表失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取列表成功！");
+            jsonObject.put("data", users);
+        }
+        return jsonObject;
     }
 
     /**
@@ -125,9 +223,20 @@ public class ManagerAPI {
      * @param uid
      * @return
      */
-    @PostMapping("/changeuser/{uid}")
-    public boolean changeType(@PathVariable("uid") Integer uid) {
-        return managerService.Elevate_permissions(uid);
+    @GetMapping("/changeuser/{uid}")
+    public JSONObject changeType(@PathVariable("uid") Integer uid) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.Elevate_permissions(uid);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "提权成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "提权失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -135,8 +244,19 @@ public class ManagerAPI {
      * @return
      */
     @PostMapping("/changeusers/{list}")
-    public boolean changeTypes(@PathVariable("list") String[] list) {
-        return managerService.Elevate_permissions(list);
+    public JSONObject changeTypes(@PathVariable("list") String[] list) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.Elevate_permissions(list);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "提权成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "提权失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -145,8 +265,19 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/user/{uid}")
-    public boolean delUser(@PathVariable("uid") Integer uid) {
-        return managerService.delUser(uid);
+    public JSONObject delUser(@PathVariable("uid") Integer uid) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.delUser(uid);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -155,8 +286,19 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/users/{uid}")
-    public boolean delUsers(@PathVariable("uid") String[] uid) {
-        return managerService.delUsers(uid);
+    public JSONObject delUsers(@PathVariable("uid") String[] uid) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = managerService.delUsers(uid);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -164,8 +306,13 @@ public class ManagerAPI {
      * @return
      */
     @GetMapping("/about")
-    public Front getIntroduction() {
-        return frontService.findFront();
+    public JSONObject getIntroduction() {
+        Front front = frontService.findFront();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", front);
+        return jsonObject;
     }
 
     /**
@@ -174,9 +321,19 @@ public class ManagerAPI {
      * @return
      */
     @PutMapping(value = "/about")
-    public boolean updateIntroduction(@RequestBody Front front) {
-        if (front == null) return false;
-        return frontService.updateFront(front);
+    public JSONObject updateIntroduction(@RequestBody Front front) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = frontService.updateFront(front);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "修改成功！");
+            jsonObject.put("data", front);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "修改失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -184,8 +341,13 @@ public class ManagerAPI {
      * @return
      */
     @GetMapping("/links")
-    public List<Link> getLinks() {
-        return linkService.getLinks();
+    public JSONObject getLinks() {
+        List<Link> links = linkService.getLinks();
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("code", 200);
+        jsonObject.put("msg", "获取成功！");
+        jsonObject.put("data", links);
+        return jsonObject;
     }
 
     /**
@@ -194,9 +356,19 @@ public class ManagerAPI {
      * @return
      */
     @PostMapping("/link")
-    public boolean addLink(@RequestBody Link link) {
-        if (link == null) return false;
-        return linkService.addLink(link);
+    public JSONObject addLink(@RequestBody Link link) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = linkService.addLink(link);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "添加成功！");
+            jsonObject.put("data", link);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "添加失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -205,9 +377,19 @@ public class ManagerAPI {
      * @return
      */
     @PutMapping("/link")
-    public boolean updateLink(@RequestBody Link link) {
-        if (link == null) return false;
-        return linkService.updateLink(link);
+    public JSONObject updateLink(@RequestBody Link link) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = linkService.updateLink(link);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "修改成功！");
+            jsonObject.put("data", link);
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "修改失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     /**
@@ -216,30 +398,105 @@ public class ManagerAPI {
      * @return
      */
     @DeleteMapping("/link")
-    public boolean delLink(@RequestBody Link link) {
-        if (link == null) return false;
-        return linkService.delLnk(link);
+    public JSONObject delLink(@RequestBody Link link) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = linkService.delLnk(link);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
+    }
+
+    @DeleteMapping("/link/{id}")
+    public JSONObject delLink(@PathVariable("id") Integer id) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = linkService.delLnk(id);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     @DeleteMapping("/links/{lid}")
-    public boolean delLinks(@PathVariable("lid") String[] lid) {
-        return linkService.delLinks(lid);
+    public JSONObject delLinks(@PathVariable("lid") String[] lid) {
+        JSONObject jsonObject = new JSONObject();
+        boolean b = linkService.delLinks(lid);
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "删除成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "删除失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
 
     @GetMapping("/user/token/{token}")
-    public User getUserByToken(@PathVariable("token") String token) {
-        return loginService.getUserByToken(token);
+    public JSONObject getUserByToken(@PathVariable("token") String token) {
+        JSONObject jsonObject = new JSONObject();
+        User user = loginService.getUserByToken(token);
+        if (user == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取token失败！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取成功！");
+            jsonObject.put("data", user);
+        }
+        return jsonObject;
     }
 
     @PostMapping("/user/login")
-    public String login(@RequestBody LoginUser loginUser) {
-        return loginService.userLogin(loginUser.getUid(), loginUser.getUser_password());
+    public JSONObject login(@RequestBody LoginUser loginUser) {
+        JSONObject jsonObject = new JSONObject();
+        String login = loginService.userLogin(loginUser.getUid(), loginUser.getUser_password());
+        if ("0".equals(login)) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "权限不足！");
+            jsonObject.put("data", "");
+        } else if ("1".equals(login)) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "用户不存在！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取成功！");
+            jsonObject.put("data", login);
+        }
+        return jsonObject;
     }
 
     @GetMapping("/user/logout/{token}")
-    public String login(@PathVariable("token") String token) {
-        return loginService.userLogout(token);
+    public JSONObject login(@PathVariable("token") String token) {
+        JSONObject jsonObject = new JSONObject();
+        String logout = loginService.userLogout(token);
+        if ("1".equals(logout)) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "注销成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "注销失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
     }
+
 
 
     @GetMapping("/all")

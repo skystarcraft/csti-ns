@@ -1,8 +1,0 @@
-vertx:
-  server:
-    port: 8300
-
-  handler-mappings:
-    - path: /
-      method: GET
-      beanNames: homeHandler

@@ -6,6 +6,8 @@ import com.cstins.manager.dao.UserDao;
 import com.cstins.manager.entity.Article;
 import com.cstins.manager.entity.Tags;
 import com.cstins.manager.entity.User;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -47,11 +50,23 @@ public class ManagerService {
      * @return
      */
     public List<User> getUsers() {
-        return userDao.findAllByTypeEquals(2);
+        List<User> users = null;
+        try {
+            users = userDao.findAllByTypeEquals(2);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public List<User> getAllUser() {
-        return userDao.findAll();
+        List<User> users = null;
+        try {
+            users = userDao.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return users;
     }
 
     public User getUserById(Integer uid) {
@@ -93,7 +108,10 @@ public class ManagerService {
         try {
             List<String> list = Arrays.asList(users);
             list.forEach(user -> {
-                userDao.changeType(getUserById(Integer.parseInt(user)).getUid());
+                User user2 = getUserById(Integer.parseInt(user));
+                if (user2.getType() < 2) {
+                    userDao.changeType(user2.getUid());
+                }
             });
             redisTemplate.opsForHash().delete(REDISKEY, "user");
         } catch (Exception e) {
@@ -109,8 +127,13 @@ public class ManagerService {
      */
     public boolean Elevate_permissions(Integer uid) {
         try {
-            userDao.changeType(uid);
-            redisTemplate.opsForHash().delete(REDISKEY, "user");
+            User user = getUserById(uid);
+            if (user.getType() < 2) {
+                userDao.changeType(uid);
+                redisTemplate.opsForHash().delete(REDISKEY, "user");
+            } else {
+                return false;
+            }
         } catch (Exception e) {
             logger.error(e);
             return false;
@@ -119,7 +142,25 @@ public class ManagerService {
     }
 
     public List<Article> getArticles() {
-        return articleDao.findAll();
+        List<Article> list = null;
+        try {
+            Object articles = redisTemplate.opsForHash().get(REDISKEY, "articles");
+            if (articles != null && !"".equals(articles) && !"null".equals(articles)) {
+                list = new ArrayList<>();
+                JSONArray jsonArray = JSONArray.fromObject(articles);
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    Article article = (Article) JSONObject.toBean((JSONObject) jsonArray.get(i), Article.class);
+                    list.add(article);
+                }
+            } else {
+                list = articleDao.findAll();
+                JSONArray jsonArray = JSONArray.fromObject(list);
+                redisTemplate.opsForHash().put(REDISKEY, "articles", jsonArray.toString());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
     }
 
     /**
@@ -207,6 +248,12 @@ public class ManagerService {
     }
 
     public List<Tags> getTags() {
-        return tagsDao.findAll();
+        List<Tags> tags = null;
+        try {
+            tags = tagsDao.findAll();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return tags;
     }
 }

@@ -42,21 +42,21 @@ public class LoginService {
                 new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
                 JSONObject jsonObject = JSONObject.fromObject(user);
                 redisTemplate.opsForValue().set("SESSION:" + token, jsonObject.toString());
-                redisTemplate.expire("SESSION:" + token, 15 * 60, TimeUnit.SECONDS);    //15分钟过期
+                redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //30分钟过期
                 return token;
             } else {
-                return "权限不够！";
+                return "0";
             }
         }
-        return "用户不存在！";
+        return "1";
     }
 
     public String userLogout(String token) {
         if (redisTemplate.hasKey("SESSION:" + token) && redisTemplate.opsForValue().get("SESSION:" + token) != null) {
             redisTemplate.delete("SESSION:" + token);
-            return "success";
+            return "1";
         }
-        return "failed";
+        return "0";
     }
 
     /**
@@ -69,7 +69,7 @@ public class LoginService {
         if (StringUtils.isNotBlank(result) && StringUtils.isNotEmpty(result)) {
             JSONObject jsonObject = JSONObject.fromObject(result);
             User user = (User) JSONObject.toBean(jsonObject, User.class);
-            redisTemplate.expire("SESSION:" + token, 15 * 60, TimeUnit.SECONDS);    //重置过期时间
+            redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //重置过期时间
             return user;
         }
         return null;
