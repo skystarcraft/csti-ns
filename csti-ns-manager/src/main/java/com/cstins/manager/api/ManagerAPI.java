@@ -461,22 +461,31 @@ public class ManagerAPI {
         return jsonObject;
     }
 
-    @PostMapping("/user/login")
+    @PostMapping("/admin/login")
     public JSONObject login(@RequestBody LoginUser loginUser) {
         JSONObject jsonObject = new JSONObject();
         String login = loginService.userLogin(loginUser.getUid(), loginUser.getUser_password());
+        JSONObject res = new JSONObject();
+        res.put("age", 22);
+        res.put("avatar", "http://134.175.68.126:9999/group1/M00/00/00/rBAADVyRvN6AVscIAAFDbgtDc8k699.jpg");
+        res.put("desc", "最牛逼的管理员");
+        res.put("name", login);
         if ("0".equals(login)) {
             jsonObject.put("code", 400);
-            jsonObject.put("msg", "权限不足！");
-            jsonObject.put("data", "");
+            jsonObject.put("msg", "");
+            jsonObject.put("data", "用户名或密码错误！");
         } else if ("1".equals(login)) {
             jsonObject.put("code", 400);
             jsonObject.put("msg", "用户不存在！");
             jsonObject.put("data", "");
+        } else if ("2".equals(login)) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "权限不足！");
+            jsonObject.put("data", "");
         } else {
             jsonObject.put("code", 200);
-            jsonObject.put("msg", "获取成功！");
-            jsonObject.put("data", login);
+            jsonObject.put("msg", "登陆成功！");
+            jsonObject.put("data", res);
         }
         return jsonObject;
     }

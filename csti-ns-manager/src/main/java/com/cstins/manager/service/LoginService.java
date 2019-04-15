@@ -36,16 +36,20 @@ public class LoginService {
     public String userLogin(Integer uid, String password) {
         if (userService.userIsExists(uid)) {
             User user = userService.getUserByUid(uid);
-            if (user.getUser_password().equals(password) && user.getType() >= 3) {
-                String token = UUID.randomUUID().toString();
-                user.setUser_password(null);
-                new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
-                JSONObject jsonObject = JSONObject.fromObject(user);
-                redisTemplate.opsForValue().set("SESSION:" + token, jsonObject.toString());
-                redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //30分钟过期
-                return token;
+            if (user.getType() >= 3) {
+                if (user.getUser_password().equals(password)) {
+                    String token = UUID.randomUUID().toString();
+                    user.setUser_password(null);
+                    new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
+                    JSONObject jsonObject = JSONObject.fromObject(user);
+                    redisTemplate.opsForValue().set("SESSION:" + token, jsonObject.toString());
+                    redisTemplate.expire("SESSION:" + token, 30 * 60, TimeUnit.SECONDS);    //30分钟过期
+                    return user.getUser_name();
+                } else {
+                    return "0";
+                }
             } else {
-                return "0";
+                return "2";
             }
         }
         return "1";
