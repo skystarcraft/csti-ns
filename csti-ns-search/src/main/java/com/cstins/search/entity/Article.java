@@ -17,7 +17,7 @@ import java.util.Date;
 public class Article implements Serializable {
 
     @Id
-    private Integer article_id;                 //文章id
+    private Integer aid;                        //文章id
 
     private String article_title;               //文章标题
 
@@ -27,14 +27,14 @@ public class Article implements Serializable {
 
     private Integer uid;                        //作者id
 
-    private Date article_date;                  //发布时间
+    private Date adate;                  //发布时间
 
-    public Integer getArticle_id() {
-        return article_id;
+    public Integer getAid() {
+        return aid;
     }
 
-    public void setArticle_id(Integer article_id) {
-        this.article_id = article_id;
+    public void setAid(Integer aid) {
+        this.aid = aid;
     }
 
     public String getArticle_title() {
@@ -69,12 +69,12 @@ public class Article implements Serializable {
         this.uid = uid;
     }
 
-    public Date getArticle_date() {
-        return article_date;
+    public Date getAdate() {
+        return adate;
     }
 
-    public void setArticle_date(Date article_date) {
-        this.article_date = article_date;
+    public void setAdate(Date adate) {
+        this.adate = adate;
     }
 
     public Article() {

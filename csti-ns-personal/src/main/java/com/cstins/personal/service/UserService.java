@@ -3,6 +3,7 @@ package com.cstins.personal.service;
 import com.cstins.personal.dao.CollectionDao;
 import com.cstins.personal.dao.UserDao;
 import com.cstins.personal.entity.User;
+import com.cstins.personal.entity.User_collection;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,4 +106,13 @@ public class UserService {
         return true;
     }
 
+    public boolean iscollectionArticle(Integer uid, Integer aid) {
+        List<User_collection> all = dao.findAllByUidEquals(uid);
+        for (int i = 0; i < all.size(); i++) {
+            if ((all.get(i).getAid() == aid )|| all.get(i).getAid().equals(aid)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

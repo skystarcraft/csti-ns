@@ -2,7 +2,9 @@ package com.cstins.article.service;
 
 import com.cstins.article.dao.ArticleDao;
 import com.cstins.article.dao.ArticleTagDao;
+import com.cstins.article.dao.UserCollectionDao;
 import com.cstins.article.entity.Article;
+import com.cstins.article.entity.User_collection;
 import com.cstins.article.tools.JsonDateValueProcessor;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -36,6 +38,9 @@ public class ArticleService {
     @Autowired
     private ArticleTagDao articleTagDao;
 
+    @Autowired
+    private UserCollectionDao userCollectionDao;
+
     public List<Article> getAllArticles() {
         List<Article> list = null;
         try {
@@ -48,7 +53,7 @@ public class ArticleService {
                     list.add(article);
                 }
             } else {
-                list = articleDao.findAll();
+                list = articleDao.findAllByOrderByAdateDesc();
                 JSONArray jsonArray = JSONArray.fromObject(list);
                 redisTemplate.opsForHash().put(REDISKEY, "articles", jsonArray.toString());
             }
@@ -95,10 +100,10 @@ public class ArticleService {
     public boolean addOrUpdateArticle(Article article) {
         if (article == null) return false;
         articleDao.save(article);
-        redisTemplate.opsForHash().delete(REDISKEY, article.getArticle_id() + "");
+        redisTemplate.opsForHash().delete(REDISKEY, article.getAid() + "");
         new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
         JSONObject jsonObject = JSONObject.fromObject(article);
-        redisTemplate.opsForHash().put(REDISKEY, article.getArticle_id() + "", jsonObject.toString());
+        redisTemplate.opsForHash().put(REDISKEY, article.getAid() + "", jsonObject.toString());
         redisTemplate.opsForHash().delete(REDISKEY, "articles");
         return true;
     }
@@ -107,6 +112,8 @@ public class ArticleService {
         if (article == null) return false;
         try {
             articleDao.delete(article);
+            redisTemplate.opsForHash().delete(REDISKEY, article.getAid() + "");
+            redisTemplate.opsForHash().delete(REDISKEY, "articles");
         } catch (Exception e) {
             return false;
         }
@@ -153,4 +160,18 @@ public class ArticleService {
         return true;
     }
 
+    public List<Article> getCollectArticles(Integer uid) {
+        List<Article> list = null;
+        try {
+            List<Integer> aids = new ArrayList<>();
+            List<User_collection> all = userCollectionDao.findAllByUidEquals(uid);
+            for (int i = 0; i < all.size(); i++) {
+                aids.add(all.get(i).getAid());
+            }
+            list = articleDao.findAllByAidIsIn(aids);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

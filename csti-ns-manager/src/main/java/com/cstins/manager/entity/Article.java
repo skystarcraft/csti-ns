@@ -16,7 +16,7 @@ public class Article implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer article_id;                 //文章id
+    private Integer aid;                 //文章id
 
     @Column
     private String article_title;               //文章标题
@@ -31,18 +31,19 @@ public class Article implements Serializable {
     private Integer uid;                    //作者id
 
     @Column
-    private Date article_date;                  //发布时间
+    private Date adate;                  //发布时间
 
 //    @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER) //  级联保存 更新 删除 刷新 延迟加载
 //    @JoinColumn(name = "article_id")
 //    private Set<Tags> tags = new HashSet<>();   //外键关联
 
-    public Integer getArticle_id() {
-        return article_id;
+
+    public Integer getAid() {
+        return aid;
     }
 
-    public void setArticle_id(Integer article_id) {
-        this.article_id = article_id;
+    public void setAid(Integer aid) {
+        this.aid = aid;
     }
 
     public String getArticle_title() {
@@ -77,14 +78,22 @@ public class Article implements Serializable {
         this.uid = uid;
     }
 
-    public Date getArticle_date() {
-        return article_date;
+    public Date getAdate() {
+        return adate;
     }
 
-    public void setArticle_date(Date article_date) {
-        this.article_date = article_date;
+    public void setAdate(Date adate) {
+        this.adate = adate;
     }
 
     public Article() {
+    }
+
+    public Article(String article_title, String article_context, Integer article_view, Integer uid, Date article_date) {
+        this.article_title = article_title;
+        this.article_context = article_context;
+        this.article_view = article_view;
+        this.uid = uid;
+        this.adate = article_date;
     }
 }

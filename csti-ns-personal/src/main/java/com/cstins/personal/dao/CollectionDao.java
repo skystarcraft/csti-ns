@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 public interface CollectionDao extends JpaRepository<User_collection, Integer> {
 
     @Modifying
@@ -18,4 +20,6 @@ public interface CollectionDao extends JpaRepository<User_collection, Integer> {
     @Query(value = "delete from user_collection where uid = ?1 and aid = ?2", nativeQuery = true)
     int cancelCollection(Integer uid, Integer aid);
 
+
+    List<User_collection> findAllByUidEquals(Integer uid);
 }

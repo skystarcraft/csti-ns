@@ -2,7 +2,9 @@ spring:
   data:
     elasticsearch:
       cluster-name: elasticsearch
-      cluster-nodes: 106.13.86.229:9300
+      cluster-nodes: 127.0.0.1:9300
+#      cluster-nodes: 106.13.86.229:9300
   elasticsearch:
     rest:
-      uris: ["http://106.13.86.229:9200"]
+      uris: ["http://127.0.0.1:9200"]
+#      uris: ["http://106.13.86.229:9200"]

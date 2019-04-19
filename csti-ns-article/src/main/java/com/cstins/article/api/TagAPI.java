@@ -1,5 +1,6 @@
 package com.cstins.article.api;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.cstins.article.entity.Tags;
 import com.cstins.article.service.TagService;
@@ -23,6 +24,13 @@ public class TagAPI {
     @GetMapping("/tags")
     public JSONObject getTag() {
         List<Tags> tags = tagService.getAllTags();
+        JSONArray jsonArray = new JSONArray();
+        tags.forEach(tag -> {
+            JSONObject jsonObject = new JSONObject();
+            jsonObject.put("label", tag.getTag_name());
+            jsonObject.put("value", tag.getTag_id());
+            jsonArray.add(jsonObject);
+        });
         JSONObject jsonObject = new JSONObject();
         if (tags == null) {
             jsonObject.put("code", 400);
@@ -31,7 +39,7 @@ public class TagAPI {
         } else {
             jsonObject.put("code", 200);
             jsonObject.put("msg", "获取列表成功！");
-            jsonObject.put("data", tags);
+            jsonObject.put("data", jsonArray);
         }
         return jsonObject;
     }

@@ -15,8 +15,12 @@ public interface ArticleDao extends JpaRepository<Article, Integer> {
 
     @Modifying
     @Transactional
-    @Query(value = "update article set article_view = article_view + 1 where article_id = ?1", nativeQuery = true)
+    @Query(value = "update article set article_view = article_view + 1 where aid = ?1", nativeQuery = true)
     int addArticleView(Integer aid);
 
     List<Article> findAllByUidEquals(Integer uid);
+
+    List<Article> findAllByOrderByAdateDesc();
+
+    List<Article> findAllByAidIsIn(List<Integer> list);
 }

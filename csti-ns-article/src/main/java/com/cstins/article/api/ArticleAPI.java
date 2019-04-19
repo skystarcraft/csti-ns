@@ -74,6 +74,22 @@ public class ArticleAPI {
         return jsonObject;
     }
 
+    @GetMapping("/my/collection/{uid}")
+    public JSONObject getCollectArticleByUid(@PathVariable("uid") Integer uid) {
+        List<Article> articles = articleService.getCollectArticles(uid);
+        JSONObject jsonObject = new JSONObject();
+        if (articles == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "您没有写文章！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取成功！");
+            jsonObject.put("data", articles);
+        }
+        return jsonObject;
+    }
+
     @PutMapping("/article")
     public JSONObject updateArticle(@RequestBody Article article) {
         boolean b = articleService.addOrUpdateArticle(article);
@@ -95,7 +111,7 @@ public class ArticleAPI {
         JSONObject jsonObject = new JSONObject();
         if (article.getUid() != null && !"".equals(article.getUid())) {
             article.setArticle_view(0);
-            article.setArticle_date(new Date());
+            article.setAdate(new Date());
             boolean b = articleService.addOrUpdateArticle(article);
             if (b) {
                 jsonObject.put("code", 200);
@@ -163,7 +179,7 @@ public class ArticleAPI {
         return jsonObject;
     }
 
-    @PostMapping("/art/{aid}/tag/{tid}")
+    @GetMapping("/art/{aid}/tag/{tid}")
     public JSONObject addTagtoArticle(@PathVariable("aid") Integer aid, @PathVariable("tid") Integer tid) {
         boolean b = articleService.addTag(aid, tid);
         JSONObject jsonObject = new JSONObject();

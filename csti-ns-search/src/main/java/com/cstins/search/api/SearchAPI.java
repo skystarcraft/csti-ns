@@ -93,12 +93,12 @@ public class SearchAPI {
             for (int i = 0; i < articles.size(); i++) {
                 ArticleMysql articleMysql = articles.get(i);
                 Article article = new Article();
-                article.setArticle_id(articleMysql.getArticle_id());
+                article.setAid(articleMysql.getAid());
                 article.setArticle_title(articleMysql.getArticle_title());
                 article.setArticle_context(articleMysql.getArticle_context());
                 article.setArticle_view(articleMysql.getArticle_view());
                 article.setUid(articleMysql.getUid());
-                article.setArticle_date(articleMysql.getArticle_date());
+                article.setAdate(articleMysql.getAdate());
                 articleDao.save(article);
             }
             jsonObject.put("code", 200);

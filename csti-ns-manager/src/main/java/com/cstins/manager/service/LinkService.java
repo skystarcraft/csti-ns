@@ -33,7 +33,7 @@ public class LinkService {
 
     public List<Link> getLinks() {
         List<Link> list = null;
-        Object links = redisTemplate.opsForHash().get(REDISKEY, "links");
+        Object links = redisTemplate.opsForHash().get(REDISKEY, "managerlinks");
         if (links != null && !"".equals(links) && !"null".equals(links)) {
             list = new ArrayList<>();
             JSONArray jsonArray = JSONArray.fromObject(links);
@@ -45,7 +45,7 @@ public class LinkService {
             list = linkDao.findAll();
 //            list = linkDao.findByTypeEquals(0);
             JSONArray jsonArray = JSONArray.fromObject(list);
-            redisTemplate.opsForHash().put(REDISKEY, "links", jsonArray.toString());
+            redisTemplate.opsForHash().put(REDISKEY, "managerlinks", jsonArray.toString());
         }
         return list;
     }
@@ -55,7 +55,7 @@ public class LinkService {
         try {
 //            linkDao.addLink(link.getLink_name(), link.getLink_addr());
             linkDao.save(link);
-            redisTemplate.opsForHash().delete(REDISKEY, "links");
+            redisTemplate.opsForHash().delete(REDISKEY, "managerlinks");
         } catch (Exception e) {
             return false;
         }
@@ -67,7 +67,7 @@ public class LinkService {
         try {
 //            linkDao.updateLink(link.getLink_name(), link.getLink_addr(), link.getId());
             linkDao.save(link);
-            redisTemplate.opsForHash().delete(REDISKEY, "links");
+            redisTemplate.opsForHash().delete(REDISKEY, "managerlinks");
         } catch (Exception e) {
             return false;
         }
@@ -78,7 +78,7 @@ public class LinkService {
         if (link == null) return false;
         try {
             linkDao.delete(link);
-            redisTemplate.opsForHash().delete(REDISKEY, "links");
+            redisTemplate.opsForHash().delete(REDISKEY, "managerlinks");
         } catch (Exception e) {
             return false;
         }
@@ -89,7 +89,7 @@ public class LinkService {
         try {
             Link link = linkDao.findById(id).get();
             linkDao.delete(link);
-            redisTemplate.opsForHash().delete(REDISKEY, "links");
+            redisTemplate.opsForHash().delete(REDISKEY, "managerlinks");
         } catch (Exception e) {
             return false;
         }
@@ -103,7 +103,7 @@ public class LinkService {
             list.forEach(l -> {
                 linkDao.delete(linkDao.findById(Integer.parseInt(l)).get());
             });
-            redisTemplate.opsForHash().delete(REDISKEY, "links");
+            redisTemplate.opsForHash().delete(REDISKEY, "managerlinks");
         } catch (Exception e) {
             return false;
         }

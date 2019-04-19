@@ -62,6 +62,22 @@ public class UserAPI {
         return jsonObject;
     }
 
+    @GetMapping("/iscollection/{uid}/{aid}")
+    public JSONObject isCollectionArticle(@PathVariable("uid") Integer uid, @PathVariable("aid") Integer aid) {
+        boolean b = userService.iscollectionArticle(uid, aid);
+        JSONObject jsonObject = new JSONObject();
+        if (b) {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "收藏成功！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "收藏失败！");
+            jsonObject.put("data", "");
+        }
+        return jsonObject;
+    }
+
     @DeleteMapping("/collection/{uid}/{aid}")
     public JSONObject cancelCollectionArticle(@PathVariable("uid") Integer uid, @PathVariable("aid") Integer aid) {
         boolean b = userService.cancelCollection(uid, aid);
