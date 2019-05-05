@@ -50,7 +50,9 @@ public class OrderService {
      * @return
      */
     public Integer getOrderId() {
-        return orderDao.getMaxOrder_id() + 1;
+
+         return (int)((Math.random()*9+1)*10000000);
+//        return orderDao.getMaxOrder_id() + 1;
     }
 
 }
