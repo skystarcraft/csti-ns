@@ -14,13 +14,13 @@
 - 后端应用框架
 
    ```
-   vertx-web + springboot + springcloud + jpa
+   springboot + springcloud + jpa
    ```
 
 - 前端应用框架
 
     ```
-    vue
+    vue全家桶
     ```
 
 - 版本管理工具
