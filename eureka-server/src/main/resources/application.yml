@@ -10,4 +10,5 @@ eureka:
     fetch-registry: false
     register-with-eureka: false
     service-url:
-      defaultZone: http://localhost:8000/eureka/
+#      defaultZone: http://localhost:8000/eureka/
+      defaultZone: http://134.175.68.126:8000/eureka/

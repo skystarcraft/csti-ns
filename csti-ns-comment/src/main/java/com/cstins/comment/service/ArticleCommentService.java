@@ -55,19 +55,23 @@ public class ArticleCommentService {
 
     public List<ArticleComment> getArticleCommentsByAid(Integer aid) {
         List<ArticleComment> list = null;
-        Object comments = redisTemplate.opsForHash().get(REDISKEY, "commentsByAid" + aid);
-        if (comments != null && !"".equals(comments) && !"null".equals(comments)) {
-            list = new ArrayList<>();
-            JSONArray jsonArray = JSONArray.fromObject(comments);
-            for (int i = 0; i < jsonArray.size(); i++) {
-                ArticleComment articleComment = (ArticleComment) JSONObject.toBean((JSONObject) jsonArray.get(i)
-                        , ArticleComment.class);
-                list.add(articleComment);
+        try {
+            Object comments = redisTemplate.opsForHash().get(REDISKEY, "commentsByAid" + aid);
+            if (comments != null && !"".equals(comments) && !"null".equals(comments)) {
+                list = new ArrayList<>();
+                JSONArray jsonArray = JSONArray.fromObject(comments);
+                for (int i = 0; i < jsonArray.size(); i++) {
+                    ArticleComment articleComment = (ArticleComment) JSONObject.toBean((JSONObject) jsonArray.get(i)
+                            , ArticleComment.class);
+                    list.add(articleComment);
+                }
+            } else {
+                list = articleCommentDao.findAllByAidEqualsOrderByCdateDesc(aid);
+                JSONArray jsonArray = JSONArray.fromObject(list);
+                redisTemplate.opsForHash().put(REDISKEY, "commentsByAid" + aid, jsonArray.toString());
             }
-        } else {
-            list = articleCommentDao.findAllByAidEqualsOrderByCdateDesc(aid);
-            JSONArray jsonArray = JSONArray.fromObject(list);
-            redisTemplate.opsForHash().put(REDISKEY, "commentsByAid" + aid, jsonArray.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return list;
     }
