@@ -1,7 +1,10 @@
 package com.cstins.personal.api;
 
 import com.alibaba.fastjson.JSONObject;
+import com.cstins.personal.entity.Downloadrecord;
+import com.cstins.personal.entity.Orderpay;
 import com.cstins.personal.entity.User;
+import com.cstins.personal.service.RecordService;
 import com.cstins.personal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +22,9 @@ public class UserAPI {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private RecordService recordService;
 
     @GetMapping("/user/{uid}")
     public JSONObject getUser(@PathVariable("uid") Integer uid) {
@@ -90,6 +96,38 @@ public class UserAPI {
             jsonObject.put("code", 400);
             jsonObject.put("msg", "取消收藏失败！");
             jsonObject.put("data", "");
+        }
+        return jsonObject;
+    }
+
+    @GetMapping("/download/record/{uid}")
+    public JSONObject getDownloadRecord(@PathVariable("uid") Integer uid) {
+        JSONObject jsonObject = new JSONObject();
+        List<Downloadrecord> record = recordService.getDownloadRecord(uid);
+        if (record == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "获取下载记录为空！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取下载记录成功！");
+            jsonObject.put("data", record);
+        }
+        return jsonObject;
+    }
+
+    @GetMapping("/order/record/{uid}")
+    public JSONObject getOrderRecord(@PathVariable("uid") Integer uid) {
+        JSONObject jsonObject = new JSONObject();
+        List<Orderpay> list = recordService.getOrder(uid);
+        if (list == null) {
+            jsonObject.put("code", 400);
+            jsonObject.put("msg", "充值记录为空！");
+            jsonObject.put("data", "");
+        } else {
+            jsonObject.put("code", 200);
+            jsonObject.put("msg", "获取充值记录成功！");
+            jsonObject.put("data", list);
         }
         return jsonObject;
     }

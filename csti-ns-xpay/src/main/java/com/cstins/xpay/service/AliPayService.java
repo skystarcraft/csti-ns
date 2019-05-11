@@ -35,7 +35,7 @@ public class AliPayService {
         alipayRequest.setNotifyUrl(AliPayConfig.notify_url);
 
         //订单名称，必填
-        String subject = "商品测试";
+        String subject = "积分购买";
 
         //商品描述，可空
         String body = "积分购买";

@@ -32,7 +32,7 @@ public class OrderService {
      * @return
      */
     public boolean createOrder(Integer oid, Integer uid, Date date, Integer imoney) {
-        OrderPay orderPay = new OrderPay(oid, uid, date, imoney);
+        OrderPay orderPay = new OrderPay(oid, uid, new java.sql.Date(date.getTime()), imoney);
         orderDao.save(orderPay);
         return true;
     }

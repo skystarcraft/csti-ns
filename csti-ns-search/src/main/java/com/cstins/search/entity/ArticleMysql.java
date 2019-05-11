@@ -2,7 +2,7 @@ package com.cstins.search.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @program: csti-ns

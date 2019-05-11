@@ -1,6 +1,8 @@
 package com.cstins.res.service;
 
+import com.cstins.res.dao.DownloadrecordDao;
 import com.cstins.res.dao.ResourceDao;
+import com.cstins.res.entity.Downloadrecord;
 import com.cstins.res.entity.Resource;
 import com.github.tobato.fastdfs.domain.StorePath;
 import com.github.tobato.fastdfs.exception.FdfsUnsupportStorePathException;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.sql.Date;
 import java.util.List;
 
 /**
@@ -39,6 +42,9 @@ public class ResourceService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private DownloadrecordDao downloadrecordDao;
 
     private static final String REDISKEY = "csti:res";
 
@@ -79,6 +85,14 @@ public class ResourceService {
         }
         Integer score = resource.getRscore();
         boolean b = userService.reduceScore(score, uid);
+        if (b) {
+            Downloadrecord downloadrecord = new Downloadrecord();
+            downloadrecord.setDowndate(new Date(new java.util.Date().getTime()));
+            downloadrecord.setUid(uid);
+            downloadrecord.setRid(rid);
+            downloadrecord.setRname(resource.getRname());
+            downloadrecordDao.save(downloadrecord);
+        }
         if (b) {
             result.put("code", 200);
             result.put("msg", "获取成功！");

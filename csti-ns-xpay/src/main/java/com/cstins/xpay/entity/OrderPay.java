@@ -1,7 +1,7 @@
 package com.cstins.xpay.entity;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * @program: csti-ns

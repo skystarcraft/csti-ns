@@ -88,6 +88,7 @@ public class XpayAPI {
             }
         }
         return new ModelAndView("redirect:http://localhost:8080/#/xpay");
+//        return new ModelAndView("redirect:http://134.175.68.126:8080/#/xpay");
     }
 
 

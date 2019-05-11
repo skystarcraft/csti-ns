@@ -13,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -78,7 +78,7 @@ public class ArticleService {
                 redisTemplate.opsForHash().put(REDISKEY, id + "", jsonObject.toString());
                 return article1;
             } catch (Exception e) {
-                Article article1 = new Article("大胸弟你迷路了", "文章不存在", 0, 0, new java.util.Date());
+                Article article1 = new Article("大胸弟你迷路了", "文章不存在", 0, 0, new    Date());
                 new JsonConfig().registerJsonValueProcessor(Date.class, new JsonDateValueProcessor("yyyy-MM-dd"));
                 JSONObject jsonObject = JSONObject.fromObject(article1);
                 redisTemplate.opsForHash().put(REDISKEY, id + "", jsonObject.toString());
