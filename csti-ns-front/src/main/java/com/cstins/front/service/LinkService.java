@@ -41,8 +41,8 @@ public class LinkService {
                 list.add(l);
             }
         } else {
-//            list = linkDao.findAll();
-            list = linkDao.findByTypeEquals(0);
+            list = linkDao.findAll();
+//            list = linkDao.findByTypeEquals(0);
             JSONArray jsonArray = JSONArray.fromObject(list);
             redisTemplate.opsForHash().put(REDISKEY, "links", jsonArray.toString());
         }
